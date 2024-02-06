@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\ExpenseType;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ExpenseTypeController extends Controller
 {
@@ -12,7 +14,16 @@ class ExpenseTypeController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $accounts = ExpenseType::all();
+            return $this->sendResponse($accounts, 200, ['Expense Type List'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
     }
 
     /**
@@ -28,7 +39,16 @@ class ExpenseTypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $account = ExpenseType::create($request->all());
+            return $this->sendResponse($account, 200, ['Expense Type Created Successfully'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
     }
 
     /**
@@ -36,7 +56,15 @@ class ExpenseTypeController extends Controller
      */
     public function show(ExpenseType $expenseType)
     {
-        //
+        try {
+            return $this->sendResponse($expenseType, 200, ['Expense Type Details'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
     }
 
     /**
@@ -52,7 +80,16 @@ class ExpenseTypeController extends Controller
      */
     public function update(Request $request, ExpenseType $expenseType)
     {
-        //
+        try {
+            $expenseType->update($request->all());
+            return $this->sendResponse($expenseType, 200, ['Expense Type Updated Successfully'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
     }
 
     /**
@@ -60,6 +97,15 @@ class ExpenseTypeController extends Controller
      */
     public function destroy(ExpenseType $expenseType)
     {
-        //
+        try {
+            $expenseType->delete();
+            return $this->sendResponse(null, 200, ['Expense Type Deleted Successfully'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
     }
 }
