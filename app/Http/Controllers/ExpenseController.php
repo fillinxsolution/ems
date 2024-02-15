@@ -39,8 +39,7 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
-        dd('asdfasdf');
-        try {
+         try {
             // $user = auth()->user();
             // $expense = $user->expenses()->create($request->all());
             // if($expense){
