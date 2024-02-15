@@ -36,9 +36,10 @@ class UserController extends Controller
         }
     }
 
-    public function accounts(User $user)
+    public function accounts()
     {
         try {
+            $user = auth()->user();
             $user->load('accounts.bank');
             return $this->sendResponse($user, 200, ['User Details'], true);
         } catch (QueryException $e) {
