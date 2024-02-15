@@ -34,14 +34,13 @@ class FundTransferController extends Controller
     public function create(User $user)
     {
         try {
-            $fundTrasfer = FundTransfer::all();
             $user->load('accounts');
             $accounts = Account::where('user_id', '!=', $user->id)->get();
             $data = [
                 'user' => $user,
                 'accounts' => $accounts
             ];
-            return $this->sendResponse($fundTrasfer, 200, ['Funds List'], true);
+            return $this->sendResponse($data, 200, ['Funds List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
