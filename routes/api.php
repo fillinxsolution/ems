@@ -32,21 +32,23 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
+    Route::get('transection', [TransactionController::class, 'index']);
 
-    // Route::resource('expense', ExpenseController::class);
-    Route::resource('role', RoleController::class);
+    Route::post('kharcha/store', [ExpenseController::class, 'store']);
     Route::get('user/accounts', [UserController::class, 'accounts']);
     Route::get('user/expenses', [UserController::class, 'expenses']);
     Route::get('user/transections', [UserController::class, 'transections']);
     Route::get('fund_transfer/create', [FundTransferController::class, 'create']);
+
+    // Route::resource('expense', ExpenseController::class);
+    Route::resource('role', RoleController::class);
+
     Route::resource('user', UserController::class);
     Route::resource('bank', BankController::class);
     Route::resource('account', AccountController::class);
     Route::resource('expense_type', ExpenseTypeController::class);
     Route::resource('fund_transfer', FundTransferController::class);
-    Route::get('transection', [TransactionController::class, 'index']);
 
-    Route::post('kharcha/store', [ExpenseController::class, 'store']);
     // Route::get('expense', [ExpenseController::class, 'index']);
     // Route::get('expense/{expense}', [ExpenseController::class, 'show']);
 });
