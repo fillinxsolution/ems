@@ -40,7 +40,8 @@ class ExpenseController extends Controller
     public function store(Request $request)
     {
         try {
-            $expense = Expense::create($request->all());
+            $user = auth()->user();
+            $expense = $user->expenses()->create($request->all());
             $expense->updateBalance($request->account_id, $request->amount, 'Outgoing', 'Transfer');
             return $this->sendResponse($expense, 200, ['Expense Created Successfully'], true);
         } catch (QueryException $e) {
