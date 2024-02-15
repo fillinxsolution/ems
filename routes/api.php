@@ -46,6 +46,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('fund_transfer', FundTransferController::class);
     Route::get('transection', [TransactionController::class, 'index']);
     Route::post('expense/store', [ExpenseController::class, 'store']);
-    Route::get('expense', [ExpenseController::class, 'index']);
+    // Route::get('expense', [ExpenseController::class, 'index']);
     Route::get('expense/{expense}', [ExpenseController::class, 'show']);
 });
