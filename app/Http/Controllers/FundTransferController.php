@@ -31,9 +31,10 @@ class FundTransferController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(User $user)
+    public function create()
     {
         try {
+            $user = auth()->user();
             $user->load('accounts');
             $accounts = Account::where('user_id', '!=', $user->id)->get();
             $data = [
