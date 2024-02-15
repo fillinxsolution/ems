@@ -16,6 +16,7 @@ class ExpenseController extends Controller
     {
         try {
             $expense = Expense::all();
+            dd('asdfasdf');
             return $this->sendResponse($expense, 200, ['Expenses List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
@@ -41,6 +42,7 @@ class ExpenseController extends Controller
     {
         // try {
             $user = auth()->user();
+            dd('s');
             $expense = $user->expenses()->create($request->all());
             dd($expense);
             if($expense){
