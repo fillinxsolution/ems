@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ExpenseTypeController;
 use App\Http\Controllers\FundTransferController;
 use App\Http\Controllers\RoleController;
@@ -32,10 +33,14 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::resource('role', RoleController::class);
+    Route::get('user/accounts', [UserController::class, 'accounts']);
+    Route::get('user/expenses', [UserController::class, 'expenses']);
+    Route::get('user/transections', [UserController::class, 'transections']);
     Route::resource('user', UserController::class);
     Route::resource('bank', BankController::class);
     Route::resource('account', AccountController::class);
     Route::resource('expense_type', ExpenseTypeController::class);
+    Route::resource('expense', ExpenseController::class);
     Route::resource('fund_transfer', FundTransferController::class);
     Route::get('transection', [TransactionController::class, 'index']);
 });

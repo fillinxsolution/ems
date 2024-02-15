@@ -23,6 +23,11 @@ class Account extends Model
         return $this->hasMany(Transaction::class, 'account_id', 'id');
     }
 
+    public function expenses()
+    {
+        return $this->hasMany(Expense::class, 'account_id');
+    }
+
     public function user(){
         return $this->belongsTo(User::class, 'user_id');
     }

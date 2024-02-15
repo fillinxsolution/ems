@@ -35,6 +35,50 @@ class UserController extends Controller
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
         }
     }
+
+    public function accounts(User $user)
+    {
+        try {
+            $user->load('accounts.bank');
+            return $this->sendResponse($user, 200, ['User Details'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
+
+    public function expenses(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            $user->load('expenses.account', 'expenses.expenseType');
+            return $this->sendResponse($user, 200, ['User Details'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
+
+    public function transections(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            $user->load('accounts.transactions');
+            return $this->sendResponse($user, 200, ['Transection Details'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
     public function store(Request $request)
     {
 

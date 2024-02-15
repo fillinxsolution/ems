@@ -47,4 +47,8 @@ class User extends Authenticatable
     public function accounts(){
         return $this->hasMany(Account::class, 'user_id');
     }
+    public function expenses()
+    {
+        return $this->hasMany(Expense::class, 'user_id');
+    }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
 use App\Models\FundTransfer;
+use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -29,9 +31,24 @@ class FundTransferController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(User $user)
     {
-        //
+        try {
+            $fundTrasfer = FundTransfer::all();
+            $user->load('accounts');
+            $accounts = Account::where('user_id', '!=', $user->id)->get();
+            $data = [
+                'user' => $user,
+                'accounts' => $accounts
+            ];
+            return $this->sendResponse($fundTrasfer, 200, ['Funds List'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
     }
 
     /**
