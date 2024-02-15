@@ -12,19 +12,19 @@ class ExpenseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    // public function index()
-    // {
-    //     try {
-    //         $expense = Expense::all();
-    //         return $this->sendResponse($expense, 200, ['Expenses List'], true);
-    //     } catch (QueryException $e) {
-    //         Log::error('Database error: ' . $e->getMessage());
-    //         return $this->sendResponse(null, 500, [$e->getMessage()], false);
-    //     } catch (\Exception $e) {
-    //         Log::error('Error: ' . $e->getMessage());
-    //         return $this->sendResponse(null, 500, [$e->getMessage()], false);
-    //     }
-    // }
+    public function index()
+    {
+        try {
+            $expense = Expense::all();
+            return $this->sendResponse($expense, 200, ['Expenses List'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
 
     /**
      * Show the form for creating a new resource.

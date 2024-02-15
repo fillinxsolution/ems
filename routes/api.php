@@ -32,7 +32,10 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
-    Route::apiResource('expense', ExpenseController::class);
+    Route::post('expense/store', [ExpenseController::class, 'store']);
+    Route::get('expense', [ExpenseController::class, 'index']);
+    Route::get('expense/{expense}', [ExpenseController::class, 'show']);
+    // Route::resource('expense', ExpenseController::class);
     Route::resource('role', RoleController::class);
     Route::get('user/accounts', [UserController::class, 'accounts']);
     Route::get('user/expenses', [UserController::class, 'expenses']);
