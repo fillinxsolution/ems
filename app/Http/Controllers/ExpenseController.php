@@ -39,21 +39,22 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
-        try {
+        // try {
             $user = auth()->user();
             $expense = $user->expenses()->create($request->all());
+            dd($expense);
             if($expense){
                 $expense->updateBalance($request->account_id, $request->amount, 'Outgoing', 'Transfer');
                 return $this->sendResponse($expense, 200, ['Expense Created Successfully'], true);
             }
             return $this->sendResponse(null, 500, ['somthing wrong'], false);
-        } catch (QueryException $e) {
-            Log::error('Database error: ' . $e->getMessage());
-            return $this->sendResponse(null, 500, [$e->getMessage()], false);
-        } catch (\Exception $e) {
-            Log::error('Error: ' . $e->getMessage());
-            return $this->sendResponse(null, 500, [$e->getMessage()], false);
-        }
+        // } catch (QueryException $e) {
+        //     Log::error('Database error: ' . $e->getMessage());
+        //     return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        // } catch (\Exception $e) {
+        //     Log::error('Error: ' . $e->getMessage());
+        //     return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        // }
     }
 
     /**
