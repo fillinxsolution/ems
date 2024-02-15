@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
+    Route::resource('expense', ExpenseController::class);
     Route::resource('role', RoleController::class);
     Route::get('user/accounts', [UserController::class, 'accounts']);
     Route::get('user/expenses', [UserController::class, 'expenses']);
@@ -41,7 +42,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('bank', BankController::class);
     Route::resource('account', AccountController::class);
     Route::resource('expense_type', ExpenseTypeController::class);
-    Route::resource('expense', ExpenseController::class);
     Route::resource('fund_transfer', FundTransferController::class);
     Route::get('transection', [TransactionController::class, 'index']);
 });
