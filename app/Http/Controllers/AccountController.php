@@ -40,6 +40,16 @@ class AccountController extends Controller
     public function store(Request $request)
     {
         try {
+            $this->validate($request, [
+                'title' => 'required',
+                'account_number' => 'required|unique:accounts,account_number',
+                'bank_id' => 'required',
+                'user_id' => 'required',
+                'status' => 'required',
+                'balance' => 'required'
+                // 'name'       => 'required|unique:roles,name',
+                // 'permission' ,
+            ]);
             $account = Account::create($request->all());
             return $this->sendResponse($account, 200, ['Account Created Successfully'], true);
         } catch (QueryException $e) {
@@ -80,6 +90,16 @@ class AccountController extends Controller
      */
     public function update(Request $request, Account $account)
     {
+        $this->validate($request, [
+            'title' => 'required',
+            'account_number' => 'required|unique:accounts,account_number',
+            'bank_id' => 'required',
+            'user_id' => 'required',
+            'status' => 'required',
+            'balance' => 'required'
+            // 'name'       => 'required|unique:roles,name',
+            // 'permission' ,
+        ]);
         try {
             $account->update($request->all());
             return $this->sendResponse($account, 200, ['Account Updated Successfully'], true);
