@@ -10,7 +10,10 @@ class Bank extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'status'];
-
+    protected $hidden = [
+        'created_at',
+        'udpated_at',
+    ];
     public function accounts(){
         return $this->hasMany(Account::class, 'bank_id');
     }

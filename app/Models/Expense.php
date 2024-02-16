@@ -13,6 +13,10 @@ class Expense extends Model
 
     protected $fillable = ['user_id', 'date', 'type', 'expense_type_id', 'account_id', 'status', 'details',  'amount'];
 
+    protected $hidden = [
+        'created_at',
+        'udpated_at',
+    ];
     public function user() {
         return $this->hasOne(User::class, 'id', 'user_id');
     }

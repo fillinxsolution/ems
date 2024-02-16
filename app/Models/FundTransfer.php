@@ -13,6 +13,10 @@ class FundTransfer extends Model
 
     protected $fillable = ['details', 'account_from', 'account_to', 'amount', 'date'];
 
+    protected $hidden = [
+        'created_at',
+        'udpated_at',
+    ];
     public function setDateAttribute($value)
     {
         $this->attributes['date'] = strtotime($value);

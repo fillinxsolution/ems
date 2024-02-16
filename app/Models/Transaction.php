@@ -10,6 +10,12 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable  = ['transaction_id', 'date', 'type', 'category', 'account_id', 'amount'];
+
+    protected $hidden = [
+        'created_at',
+        'udpated_at',
+    ];
+
     public static function boot()
     {
         parent::boot();

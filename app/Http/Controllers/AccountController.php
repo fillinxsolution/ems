@@ -15,7 +15,7 @@ class AccountController extends Controller
     public function index()
     {
         try {
-            $user = auth()->user();
+            // $user = auth()->user();
             $accounts = Account::all();
             return $this->sendResponse($accounts, 200, ['Accounts List'], true);
         } catch (QueryException $e) {

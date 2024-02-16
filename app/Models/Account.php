@@ -13,6 +13,10 @@ class Account extends Model
 
     protected $fillable = ['title', 'account_number', 'bank_id','user_id', 'status', 'balance'];
 
+    protected $hidden = [
+        'created_at',
+        'udpated_at',
+    ];
 
     public function bank(){
         return $this->belongsTo(Bank::class, 'bank_id');
