@@ -65,6 +65,7 @@ class AccountController extends Controller
     public function show(Account $account)
     {
         try {
+            $account->load('transactions', 'bank', 'expenses', 'user');
             return $this->sendResponse($account, 200, ['Account Details'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
