@@ -39,10 +39,20 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
-         try {
+        $this->validate($request, [
+            'date' => 'required|date',
+            'type' => 'required',
+            'expense_type_id' => 'required',
+            'account_id' => 'required',
+            'status' => 'required',
+            'details' => 'required',
+            'amount' => 'required'
+        ]);
+
+        try {
             $user = auth()->user();
             $expense = $user->expenses()->create($request->all());
-            if($expense){
+            if ($expense) {
                 $expense->updateBalance($request->account_id, $request->amount, 'Outgoing', 'Transfer');
                 return $this->sendResponse($expense, 200, ['Expense Created Successfully'], true);
             }
@@ -86,6 +96,15 @@ class ExpenseController extends Controller
      */
     public function update(Request $request, Expense $expense)
     {
+        $this->validate($request, [
+            'date' => 'required|date',
+            'type' => 'required',
+            'expense_type_id' => 'required',
+            'account_id' => 'required',
+            'status' => 'required',
+            'details' => 'required',
+            'amount' => 'required'
+        ]);
         try {
             if ($expense->amount != $request->amount) {
                 if ($request->amount > $expense->amount) {

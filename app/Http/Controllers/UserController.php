@@ -82,7 +82,11 @@ class UserController extends Controller
     }
     public function store(Request $request)
     {
-
+        $this->validate($request, [
+            'name'      => 'required',
+            'email'     => 'required|unique:users,email',
+            'password'  => 'required|confirmed',
+        ]);
         try {
             $user = User::create($request->all());
             return $this->sendResponse($user, 200, ['User Created Successfully'], true);
@@ -98,8 +102,11 @@ class UserController extends Controller
 
     public function update(Request $request,User $user)
     {
+        $this->validate($request, [
+            'name'      => 'required'
+        ]);
         try {
-            $user->update($request->all());
+            $user->update(['name'=> $request->name]);
             return $this->sendResponse($user, 200, ['User Updated Successfully'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

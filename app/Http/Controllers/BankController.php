@@ -40,6 +40,10 @@ class BankController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'name' => 'required',
+            'status' => 'required',
+        ]);
         try {
             $bank = Bank::create($request->all());
             return $this->sendResponse($bank, 200, ['Bank Created Successfully'], true);
@@ -81,6 +85,10 @@ class BankController extends Controller
      */
     public function update(Request $request, Bank $bank)
     {
+        $this->validate($request, [
+            'name' => 'required',
+            'status' => 'required',
+        ]);
         try {
             $bank->update($request->all());
             return $this->sendResponse($bank, 200, ['Bank Updated Successfully'], true);

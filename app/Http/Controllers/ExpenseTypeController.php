@@ -39,6 +39,11 @@ class ExpenseTypeController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'name' => 'required',
+            'status' => 'required',
+            'details' => 'required',
+        ]);
         try {
             $account = ExpenseType::create($request->all());
             return $this->sendResponse($account, 200, ['Expense Type Created Successfully'], true);
@@ -80,6 +85,11 @@ class ExpenseTypeController extends Controller
      */
     public function update(Request $request, ExpenseType $expenseType)
     {
+        $this->validate($request, [
+            'name' => 'required',
+            'status' => 'required',
+            'details' => 'required',
+        ]);
         try {
             $expenseType->update($request->all());
             return $this->sendResponse($expenseType, 200, ['Expense Type Updated Successfully'], true);
