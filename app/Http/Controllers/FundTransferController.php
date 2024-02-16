@@ -57,6 +57,10 @@ class FundTransferController extends Controller
     public function store(Request $request)
     {
         try {
+            $account_from = Account::where('id', $request->account_from)->first();
+            if($account_from->balance < $request->amount){
+                return $this->sendResponse(null, 500, ['Amount is greater then account balance'], false);
+            }
             $transfer = FundTransfer::create($request->all());
             $transfer->updateBalance($request->account_from, $request->amount, 'Outgoing', 'Transfer');
             $transfer->updateBalance($request->account_to, $request->amount, 'Incoming', 'Transfer');
