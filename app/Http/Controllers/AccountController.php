@@ -49,7 +49,7 @@ class AccountController extends Controller
                 'balance' => 'required'
             ]);
             $user = auth()->user();
-            $account = $user()->accounts()->create($request->all());
+            $account = $user->accounts()->create($request->all());
 
             return $this->sendResponse($account, 200, ['Account Created Successfully'], true);
         } catch (QueryException $e) {
