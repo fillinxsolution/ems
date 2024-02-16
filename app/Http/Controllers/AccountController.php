@@ -93,7 +93,7 @@ class AccountController extends Controller
     {
         $this->validate($request, [
             'title' => 'required',
-            'account_number' => 'required|unique:accounts,account_number,'.$account->id,
+            'account_number' => 'required|unique:accounts,account_number,'.$account->id .'ID',
             'status' => 'required'
         ]);
         try {
