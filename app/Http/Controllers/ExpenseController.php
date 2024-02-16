@@ -15,7 +15,15 @@ class ExpenseController extends Controller
     public function index()
     {
         try {
-            $expense = Expense::with('user','account', 'expenseType')->get();
+            $expense = Expense::with(
+                ['user' => function($query) {
+                    $query->select('id', 'name');
+                }, 'account' => function($query) {
+                    $query->select('id', 'title', 'account_number');
+                }, 'expenseType' => function($query) {
+                    $query->select('id', 'name');
+                }]
+            )->get();
             return $this->sendResponse($expense, 200, ['Expenses List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
