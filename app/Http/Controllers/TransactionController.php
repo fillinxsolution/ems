@@ -15,7 +15,7 @@ class TransactionController extends Controller
     public function index()
     {
         try {
-            $trasections = Transaction::all();
+            $trasections = Transaction::with('account')->get();
             return $this->sendResponse($trasections, 200, ['Funds List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
