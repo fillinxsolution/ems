@@ -17,7 +17,7 @@ class FundTransferController extends Controller
     public function index()
     {
         try {
-            $fundTrasfer = FundTransfer::all();
+            $fundTrasfer = FundTransfer::with('accountFrom','accountTo.user')->get();
             return $this->sendResponse($fundTrasfer, 200, ['Funds List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
