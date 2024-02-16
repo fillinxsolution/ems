@@ -15,7 +15,7 @@ class ExpenseController extends Controller
     public function index()
     {
         try {
-            $expense = Expense::with('user','account', 'expenseType')->all();
+            $expense = Expense::with('user','account', 'expenseType')->get();
             return $this->sendResponse($expense, 200, ['Expenses List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
