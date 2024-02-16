@@ -15,6 +15,7 @@ class AccountController extends Controller
     public function index()
     {
         try {
+            $user = auth()->user();
             $accounts = Account::all();
             return $this->sendResponse($accounts, 200, ['Accounts List'], true);
         } catch (QueryException $e) {
@@ -44,11 +45,12 @@ class AccountController extends Controller
                 'title' => 'required',
                 'account_number' => 'required|unique:accounts,account_number',
                 'bank_id' => 'required',
-                'user_id' => 'required',
                 'status' => 'required',
                 'balance' => 'required'
             ]);
-            $account = Account::create($request->all());
+            $user = auth()->user();
+            $account = $user()->accounts()->create($request->all());
+
             return $this->sendResponse($account, 200, ['Account Created Successfully'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
@@ -92,13 +94,17 @@ class AccountController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'account_number' => 'required|unique:accounts,account_number',
-            'bank_id' => 'required',
-            'user_id' => 'required',
-            'status' => 'required',
-            'balance' => 'required'
+            'status' => 'required'
         ]);
         try {
-            $account->update($request->all());
+            if (!$account) {
+                return $this->sendResponse(null, 500, ['Please select a valid account'], false);
+            }
+            $account->update([
+                'title' => $request->title,
+                'account_number' => $request->account_number,
+                'status' => $request->status
+            ]);
             return $this->sendResponse($account, 200, ['Account Updated Successfully'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
@@ -116,8 +122,13 @@ class AccountController extends Controller
     public function destroy(Account $account)
     {
         try {
-            $account->delete();
-            return $this->sendResponse(null, 200, ['Account Deleted Successfully'], true);
+            $user = auth()->user();
+            if ($user->id == $account->user_id) {
+                $account->delete();
+                return $this->sendResponse(null, 200, ['Account Deleted Successfully'], true);
+            } else {
+                return $this->sendResponse(null, 500, ['You have no permission for this task'], false);
+            }
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
