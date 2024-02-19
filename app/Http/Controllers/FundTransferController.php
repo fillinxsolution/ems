@@ -11,6 +11,14 @@ use Illuminate\Support\Facades\Log;
 
 class FundTransferController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:transfer-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:transfer-create|transfer-edit', ['only' => ['store']]);
+        $this->middleware('permission:transfer-edit', ['only' => ['update']]);
+        $this->middleware('permission:transfer-delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      */

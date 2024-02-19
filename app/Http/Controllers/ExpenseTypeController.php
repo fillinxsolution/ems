@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\Log;
 
 class ExpenseTypeController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:expense-type-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:expense-type-create|expense-type-edit', ['only' => ['store']]);
+        $this->middleware('permission:expense-type-edit', ['only' => ['update']]);
+        $this->middleware('permission:expense-type-delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      */

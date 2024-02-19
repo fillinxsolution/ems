@@ -10,6 +10,14 @@ use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:roles-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:roles-create|roles-edit', ['only' => ['store']]);
+        $this->middleware('permission:roles-edit', ['only' => ['update']]);
+        $this->middleware('permission:roles-delete', ['only' => ['destroy']]);
+    }
     public function index()
     {
         try {
@@ -47,11 +55,11 @@ class RoleController extends Controller
         try {
             $data = [
                 ...$request->only(['name']),
-                'guard_name'=> 'api'
+                'guard_name' => 'api'
             ];
             $role = Role::create($data);
             $permissions = $request->permissions;
-            if($permissions){
+            if ($permissions) {
                 $role->syncPermissions($permissions);
             }
             $role->load('permissions');
@@ -66,16 +74,16 @@ class RoleController extends Controller
 
     }
 
-    public function update(Request $request,Role $role)
+    public function update(Request $request, Role $role)
     {
         try {
             $data = [
                 ...$request->only(['name']),
-                'guard_name'=> 'api'
+                'guard_name' => 'api'
             ];
             $role->update($data);
             $permissions = $request->permissions;
-            if($permissions){
+            if ($permissions) {
                 $role->syncPermissions($permissions);
             }
             $role->load('permissions');

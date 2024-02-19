@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
+
+    public function __construct() {
+            $this->middleware('permission:users-list', ['only' => ['index', 'show']]);
+            $this->middleware('permission:users-create|users-edit', ['only' => ['store',]]);
+            $this->middleware('permission:users-edit', ['only' => ['update']]);
+            $this->middleware('permission:users-delete', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         try {
@@ -109,6 +117,7 @@ class UserController extends Controller
         ]);
         try {
             $user->update(['name'=> $request->name]);
+            $user->assignRole($request->role);
             return $this->sendResponse($user, 200, ['User Updated Successfully'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

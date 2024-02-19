@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\Log;
 
 class AccountController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:account-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:account-create|account-edit', ['only' => ['store']]);
+        $this->middleware('permission:account-edit', ['only' => ['update']]);
+        $this->middleware('permission:account-delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      */

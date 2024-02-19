@@ -51,6 +51,12 @@ class PermissionsSeeder extends Seeder
             'roles-edit',
             'roles-delete',
 
+            'transfer-list',
+            'transfer-view',
+            'transfer-create',
+            'transfer-edit',
+            'transfer-delete',
+
             'settings-list',
             'settings-create',
         ];
