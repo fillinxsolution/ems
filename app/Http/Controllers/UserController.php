@@ -20,7 +20,7 @@ class UserController extends Controller
     public function index()
     {
         try {
-            $users = User::all();
+            $users = User::with('roles')->get();
             return $this->sendResponse($users, 200, ['Users List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
