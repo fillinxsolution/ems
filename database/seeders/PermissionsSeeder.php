@@ -51,6 +51,12 @@ class PermissionsSeeder extends Seeder
             'roles-edit',
             'roles-delete',
 
+            'permission-list',
+            'permission-view',
+            'permission-create',
+            'permission-edit',
+            'permission-delete',
+
             'transfer-list',
             'transfer-view',
             'transfer-create',
