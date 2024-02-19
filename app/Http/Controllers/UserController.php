@@ -89,6 +89,8 @@ class UserController extends Controller
         ]);
         try {
             $user = User::create($request->all());
+            $user->assignRole($request->role);
+            $user->load('roles.permissions');
             return $this->sendResponse($user, 200, ['User Created Successfully'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

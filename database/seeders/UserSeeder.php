@@ -19,10 +19,10 @@ class UserSeeder extends Seeder
         $user = User::create([
             'name'      	=> 'Super Admin',
             'email'     	=> 'nomanbutt8322@gmail.com',
-            'password'  	=> 'Noman@8322',
+            'password'  	=> '123456789',
         ]);
 
-        $role = Role::create(['name' => 'Super Admin','guard_name' => 'web']);
+        $role = Role::create(['name' => 'Super Admin','guard_name' => 'api']);
 
         $role->syncPermissions(Permission::all());
         $user->assignRole(1);

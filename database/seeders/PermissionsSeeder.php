@@ -33,6 +33,18 @@ class PermissionsSeeder extends Seeder
             'users-edit',
             'users-delete',
 
+            'expense-type-list',
+            'expense-type-view',
+            'expense-type-create',
+            'expense-type-edit',
+            'expense-type-delete',
+
+            'expense-list',
+            'expense-view',
+            'expense-create',
+            'expense-edit',
+            'expense-delete',
+
             'roles-list',
             'roles-view',
             'roles-create',
@@ -44,7 +56,7 @@ class PermissionsSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::create(['name' => $permission, 'guard_name' => 'api']);
         }
     }
 }

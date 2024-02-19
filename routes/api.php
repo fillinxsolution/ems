@@ -6,6 +6,7 @@ use App\Http\Controllers\BankController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ExpenseTypeController;
 use App\Http\Controllers\FundTransferController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
@@ -40,14 +41,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('user/transections', [UserController::class, 'transections']);
     Route::get('fund_transfer/create', [FundTransferController::class, 'create']);
 
-    Route::resource('expense', ExpenseController::class);
-    Route::resource('role', RoleController::class);
+    Route::resource('expense',      ExpenseController::class);
+    Route::resource('role',         RoleController::class);
+    Route::resource('permission',   PermissionController::class);
 
-    Route::resource('user', UserController::class);
-    Route::resource('bank', BankController::class);
-    Route::resource('account', AccountController::class);
+    Route::resource('user',         UserController::class);
+    Route::resource('bank',         BankController::class);
+    Route::resource('account',      AccountController::class);
     Route::resource('expense_type', ExpenseTypeController::class);
-    Route::resource('fund_transfer', FundTransferController::class);
+    Route::resource('fund_transfer',FundTransferController::class);
 
     // Route::get('expense', [ExpenseController::class, 'index']);
     // Route::get('expense/{expense}', [ExpenseController::class, 'show']);
