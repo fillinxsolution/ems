@@ -11,12 +11,12 @@ use Spatie\Permission\Models\Role;
 class PermissionController extends Controller
 {
 
-    // public function __construct()
-    // {
-    //     $this->middleware('permission:permission-list', ['only' => ['index']]);
-    //     $this->middleware('permission:permission-create|permission-edit', ['only' => ['store']]);
-    //     $this->middleware('permission:permission-edit', ['only' => ['update']]);
-    // }
+    public function __construct()
+    {
+        $this->middleware('permission:permission-list', ['only' => ['index']]);
+        $this->middleware('permission:permission-create|permission-edit', ['only' => ['store']]);
+        $this->middleware('permission:permission-edit', ['only' => ['update']]);
+    }
 
     public function index()
     {
