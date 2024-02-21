@@ -34,6 +34,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         try {
+            $user->load('accounts.transactions');
             return $this->sendResponse($user, 200, ['User Details'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
