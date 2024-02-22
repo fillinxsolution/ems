@@ -23,6 +23,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'cnic',
+        'image',
+        'mobile_no',
         'password',
     ];
 
@@ -54,5 +57,9 @@ class User extends Authenticatable
     public function expenses()
     {
         return $this->hasMany(Expense::class, 'user_id');
+    }
+
+    function certificates() {
+        return $this->hasMany(UserCertification::class, 'user_id');
     }
 }
