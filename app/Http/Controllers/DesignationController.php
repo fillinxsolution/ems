@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Designation;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class DesignationController extends Controller
 {
@@ -12,15 +14,16 @@ class DesignationController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        try {
+            $designations = Designation::get();
+            return $this->sendResponse($designations, 200, ['Get List Successfully.'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
     }
 
     /**
@@ -28,7 +31,21 @@ class DesignationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $this->validate($request, [
+                'title' => 'required',
+                'department_id' => 'required',
+            ]);
+            $designation = Designation::create($request->only(['title', 'description', 'status', 'department_id']));
+
+            return $this->sendResponse($designation, 200, ['Stored Successfully.'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
     }
 
     /**
@@ -36,15 +53,15 @@ class DesignationController extends Controller
      */
     public function show(Designation $designation)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Designation $designation)
-    {
-        //
+        try {
+            return $this->sendResponse($designation, 200, ['Data get successfully,'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
     }
 
     /**
@@ -52,7 +69,20 @@ class DesignationController extends Controller
      */
     public function update(Request $request, Designation $designation)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required',
+            'department_id' => 'required',
+        ]);
+        try {
+            $designation->update($request->only(['title', 'description', 'status', 'department_id']));
+            return $this->sendResponse($designation, 200, ['Updated successfully.'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
     }
 
     /**
@@ -60,6 +90,15 @@ class DesignationController extends Controller
      */
     public function destroy(Designation $designation)
     {
-        //
+        try {
+            $designation->delete();
+            return $this->sendResponse(null, 200, ['Record deleted successfully.'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
     }
 }

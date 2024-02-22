@@ -17,15 +17,15 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $user = User::create([
-            'name'      	=> 'Super Admin',
-            'email'     	=> 'nomanbutt8322@gmail.com',
-            'password'  	=> '123456789',
+            'name'          => 'Super Admin',
+            'email'         => 'nomanbutt8322@gmail.com',
+            'password'      => '123456789',
+            'is_admin'      => 1,
         ]);
 
-        $role = Role::create(['name' => 'Super Admin','guard_name' => 'api']);
+        $role = Role::create(['name' => 'Super Admin', 'guard_name' => 'api']);
 
         $role->syncPermissions(Permission::all());
         $user->assignRole(1);
-
     }
 }

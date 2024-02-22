@@ -5,16 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
 
-    public function __construct() {
-            $this->middleware('permission:users-list', ['only' => ['index', 'show']]);
-            $this->middleware('permission:users-create|users-edit', ['only' => ['store',]]);
-            $this->middleware('permission:users-edit', ['only' => ['update']]);
-            $this->middleware('permission:users-delete', ['only' => ['destroy']]);
+    public function __construct()
+    {
+        $this->middleware('permission:users-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:users-create|users-edit', ['only' => ['store',]]);
+        $this->middleware('permission:users-edit', ['only' => ['update']]);
+        $this->middleware('permission:users-delete', ['only' => ['destroy']]);
     }
 
     public function index()
@@ -91,34 +93,43 @@ class UserController extends Controller
     }
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name'      => 'required',
-            'email'     => 'required|unique:users,email',
-            'password'  => 'required|confirmed',
-        ]);
         try {
+            DB::beginTransaction();
+            $request->validate([
+                'name'      => 'required',
+                'email'     => 'required|unique:users,email',
+                'cnic'     => 'required|unique:users,cnic',
+                'password'  => 'required|confirmed',
+            ]);
             $user = User::create($request->all());
+            if ($request->is_admin == 0) {
+                $request->validate([
+                    'details.gender' => 'required',
+                    'details.salary' => 'required',
+                    'details.joining_date' => 'required',
+                ]);
+                $user->details()->create($request->details);
+            }
             $user->assignRole($request->role);
             $user->load('roles.permissions');
+            DB::commit();
             return $this->sendResponse($user, 200, ['User Created Successfully'], true);
-        } catch (QueryException $e) {
-            Log::error('Database error: ' . $e->getMessage());
-            return $this->sendResponse(null, 500, [$e->getMessage()], false);
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error('Error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
         }
-
     }
 
-    public function update(Request $request,User $user)
+    public function update(Request $request, User $user)
     {
         $this->validate($request, [
             'name'      => 'required'
         ]);
         try {
-            $user->update(['name'=> $request->name]);
+            $user->update(['name' => $request->name]);
             $user->assignRole($request->role);
+            // $user->details()->update($request->details);
             return $this->sendResponse($user, 200, ['User Updated Successfully'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
@@ -127,7 +138,6 @@ class UserController extends Controller
             Log::error('Error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
         }
-
     }
 
 
@@ -143,6 +153,5 @@ class UserController extends Controller
             Log::error('Error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
         }
-
     }
 }

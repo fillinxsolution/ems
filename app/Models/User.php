@@ -27,6 +27,7 @@ class User extends Authenticatable
         'image',
         'mobile_no',
         'password',
+        'is_admin',
     ];
 
     /**
@@ -59,7 +60,12 @@ class User extends Authenticatable
         return $this->hasMany(Expense::class, 'user_id');
     }
 
-    function certificates() {
+    public function certificates() {
         return $this->hasMany(UserCertification::class, 'user_id');
     }
+
+    public function details()  {
+        return $this->hasOne(UserDetail::class, 'user_id');
+    }
+
 }
