@@ -109,7 +109,7 @@ class UserController extends Controller
                 ]);
                 $user->details()->create($request->details);
             }
-            $user->assignRole($request->role);
+            $user->assignRole((int) $request->role);
             $user->load('roles.permissions');
             DB::commit();
             return $this->sendResponse($user, 200, ['User Created Successfully'], true);
