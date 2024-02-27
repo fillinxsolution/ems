@@ -105,7 +105,6 @@ class UserController extends Controller
             if ($request->is_admin == 0) {
                 $request->validate([
                     'details.gender' => 'required',
-                    'details.salary' => 'required',
                     'details.joining_date' => 'required',
                 ]);
                 $user->details()->create($request->details);
