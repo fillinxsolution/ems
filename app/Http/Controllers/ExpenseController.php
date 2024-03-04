@@ -126,11 +126,11 @@ class ExpenseController extends Controller
             if ($expense->amount != $request->amount) {
                 if ($request->amount > $expense->amount) {
                     $extra = $request->amount - $expense->amount;
-                    $expense->updateBalance($expense->account_id, $extra, 'Outgoing', 'Transfer');
+                    $expense->updateBalance($expense->account_id, $extra, 'Incoming', 'Transfer');
                 }
                 if ($request->amount < $expense->amount) {
                     $less = $request->amount - $expense->amount;
-                    $expense->updateBalance($expense->account_id, $less, 'Incoming', 'Transfer');
+                    $expense->updateBalance($expense->account_id, $less, 'Outgoing', 'Transfer');
                 }
             }
             $expense->update($request->all());
