@@ -28,6 +28,7 @@ class User extends Authenticatable
         'mobile_no',
         'password',
         'is_admin',
+        'empleado_id'
     ];
 
     /**
@@ -67,5 +68,7 @@ class User extends Authenticatable
     public function details()  {
         return $this->hasOne(UserDetail::class, 'user_id');
     }
-
+    public function imports(){
+        return $this->hasMany(ImportCsvDetail::class);
+    }
 }

@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Import\Import;
+use App\Models\ImportCsv;
+use App\Models\ImportCsvDetail;
 use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -145,6 +149,33 @@ class UserController extends Controller
         try {
             $user->delete();
             return $this->sendResponse(null, 200, ['User Deleted Successfully'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
+
+    public function import(Request $request)   {
+        try{
+            $request->validate([
+                'file' => 'required|mimes:xlsx,xls',
+            ]);
+
+            $file = $request->file('file');
+            // $name = now()->format('Y-m') . '.' . $file->getClientOriginalExtension();
+            $path = $file->store('public');
+            $import_csv = ImportCsv::create([
+                'name' => $file->getClientOriginalName(),
+                'path' => $path,
+                'month' => now(),
+            ]);
+            // Process the Excel file
+            Excel::import(new Import($import_csv->id), $file);
+
+            return $this->sendResponse(null, 200, ['Excel file imported successfully!'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
