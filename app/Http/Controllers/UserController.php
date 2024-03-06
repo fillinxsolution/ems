@@ -165,10 +165,15 @@ class UserController extends Controller
             ]);
 
             $file = $request->file('file');
-            // $name = now()->format('Y-m') . '.' . $file->getClientOriginalExtension();
-            $path = $file->store('public');
+            $name = now()->format('Y-m');
+
+            $check_old_csv = ImportCsv::where('name', $name)->first();
+            if($check_old_csv){
+                return $this->sendResponse(null, 404, ['Sheet Already Exist for this month please remove it first.'], false);
+            }
+            $path = $file->storeAs('public', $name);
             $import_csv = ImportCsv::create([
-                'name' => $file->getClientOriginalName(),
+                'name' => $name,
                 'path' => $path,
                 'month' => now(),
             ]);
