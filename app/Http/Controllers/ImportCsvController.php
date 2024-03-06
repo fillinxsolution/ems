@@ -82,6 +82,7 @@ class ImportCsvController extends Controller
     public function destroy(ImportCsv $importCsv)
     {
         try {
+            dd($importCsv);
             $importCsv->delete();
             return $this->sendResponse(null, 200, ['CSV Deleted Successfully'], true);
         } catch (QueryException $e) {
