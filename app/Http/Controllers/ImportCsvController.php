@@ -79,10 +79,11 @@ class ImportCsvController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ImportCsv $importCsv)
+    public function destroy($id)
     {
         try {
-            $importCsv->delete();
+            $ImportCsv = ImportCsv::findOrFail($id);
+            $ImportCsv->delete();
             return $this->sendResponse(null, 200, ['CSV Deleted Successfully'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
