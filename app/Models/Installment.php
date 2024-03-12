@@ -17,7 +17,7 @@ class Installment extends Model
         'status',
     ];
 
-    public function user(): BelongsTo
+    public function loan(): BelongsTo
     {
         return $this->belongsTo(UserLoan::class, 'user_loan_id');
     }

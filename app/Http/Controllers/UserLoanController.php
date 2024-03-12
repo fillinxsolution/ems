@@ -18,7 +18,7 @@ class UserLoanController extends Controller
     public function index()
     {
         try {
-            $data = UserLoan::get();
+            $data = UserLoan::with('user')->get();
             return $this->sendResponse($data, 200, ['Get List Successfully.'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
