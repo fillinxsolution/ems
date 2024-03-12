@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -53,7 +54,8 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function accounts(){
+    public function accounts()
+    {
         return $this->hasMany(Account::class, 'user_id');
     }
     public function expenses()
@@ -61,14 +63,38 @@ class User extends Authenticatable
         return $this->hasMany(Expense::class, 'user_id');
     }
 
-    public function certificates() {
+    public function certificates()
+    {
         return $this->hasMany(UserCertification::class, 'user_id');
     }
 
-    public function details()  {
+    public function details()
+    {
         return $this->hasOne(UserDetail::class, 'user_id');
     }
-    public function imports(){
+    public function imports()
+    {
         return $this->hasMany(ImportCsvDetail::class);
+    }
+
+    public function loans(): HasMany
+    {
+        return $this->hasMany(UserLoan::class, 'user_id');
+    }
+
+    public function fines(): HasMany
+    {
+        return $this->hasMany(Fine::class, 'user_id');
+    }
+
+
+    public function cafeExpense(): HasMany
+    {
+        return $this->hasMany(CafeExpense::class, 'user_id');
+    }
+
+    public function wfh(): HasMany
+    {
+        return $this->hasMany(WorkFromHome::class, 'user_id');
     }
 }

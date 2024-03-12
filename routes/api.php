@@ -3,17 +3,23 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\CafeController;
+use App\Http\Controllers\CafeExpenseController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ExpenseTypeController;
+use App\Http\Controllers\FineController;
 use App\Http\Controllers\FundTransferController;
 use App\Http\Controllers\ImportCsvController;
+use App\Http\Controllers\InstallmentController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserLoanController;
+use App\Http\Controllers\WorkFromHomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -44,7 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('user/expenses', [UserController::class, 'expenses']);
     Route::get('user/transections', [UserController::class, 'transections']);
     Route::get('fund_transfer/create', [FundTransferController::class, 'create']);
-    Route::post('/import', [UserController::class,'import']);
+    Route::post('/import', [UserController::class, 'import']);
 
     Route::resource('expense',      ExpenseController::class);
     Route::resource('role',         RoleController::class);
@@ -63,4 +69,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('designation', DesignationController::class);
     Route::apiResource('qualification', QualificationController::class);
 
+
+    Route::apiResource('user-loan', UserLoanController::class);
+    Route::apiResource('cafe', CafeController::class);
+    Route::apiResource('cafe-expense', CafeExpenseController::class);
+    Route::apiResource('fine', FineController::class);
+    Route::apiResource('installment', InstallmentController::class);
+    Route::apiResource('wfh', WorkFromHomeController::class);
 });
