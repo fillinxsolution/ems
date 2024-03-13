@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('path');
-            $table->date('month')->nullable();
+            $table->unsignedSmallInteger('month');
+            $table->unsignedSmallInteger('year');
             $table->timestamps();
         });
     }

@@ -26,6 +26,14 @@ return new class extends Migration
             $table->string('earned_min')->nullable();
             $table->string('overtime_hrs')->nullable();
             $table->string('overtime_min')->nullable();
+            $table->string('earned_time_in_min')->nullable();
+            $table->string('salary_in_min')->nullable();
+            $table->string('loan_deduction')->nullable();
+            $table->string('fine_deduction')->nullable();
+            $table->string('cafe_deduction')->nullable();
+            $table->string('wfh')->nullable();
+            $table->string('bonus')->nullable();
+            $table->string('month_salary')->nullable();
             $table->timestamps();
         });
     }
