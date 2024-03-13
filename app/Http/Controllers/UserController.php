@@ -6,6 +6,7 @@ use App\Import\Import;
 use App\Models\ImportCsv;
 use App\Models\ImportCsvDetail;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -162,10 +163,12 @@ class UserController extends Controller
         try{
             $request->validate([
                 'file' => 'required|mimes:xlsx,xls',
+                'month' => 'required|numeric|between:1,12',
+                'year' => 'required|numeric|digits:4',
             ]);
 
             $file = $request->file('file');
-            $name = now()->format('Y-m');
+            $name = $request->month .'-'. $request->year;
 
             $check_old_csv = ImportCsv::where('name', $name)->first();
             if($check_old_csv){
@@ -175,7 +178,8 @@ class UserController extends Controller
             $import_csv = ImportCsv::create([
                 'name' => $name,
                 'path' => $path,
-                'month' => now(),
+                'month' => $request->month,
+                'year' => $request->year,
             ]);
             // Process the Excel file
             Excel::import(new Import($import_csv->id), $file);

@@ -14,13 +14,15 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
             $table->string('cnic')->unique()->nullable();
-            $table->string('mobile_no')->nullable();
+            $table->string('mobile_no')->unique()->nullable();
             $table->text('image')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('is_admin')->default(0);
+            $table->unsignedInteger('salary')->nullable();
+            $table->string('empleado_id')->unique()->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

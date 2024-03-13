@@ -23,6 +23,14 @@ class ImportCsvDetail extends Model
         "earned_min",
         "overtime_hrs",
         "overtime_min",
+        "earned_time_in_min",
+        "salary_in_min",
+        'loan_deduction',
+        'fine_deduction',
+        'cafe_deduction',
+        'wfh',
+        'bonus',
+        'month_salary'
     ];
 
 

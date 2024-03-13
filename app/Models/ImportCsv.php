@@ -12,7 +12,8 @@ class ImportCsv extends Model
     protected $fillable = [
         'name',
         'path',
-        'month'
+        'month',
+        'year'
     ];
 
     public function imports(){
