@@ -17,6 +17,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\UserBonusController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserLoanController;
 use App\Http\Controllers\WorkFromHomeController;
@@ -71,6 +72,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::apiResource('user-loan', UserLoanController::class);
+    Route::controller(UserBonusController::class)->prefix('user-bonus')->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store');
+        Route::patch('/{userBonus}', 'update');
+        Route::get('/{userBonus}', 'show');
+        Route::delete('/{userBonus}', 'destroy');
+    });
+    Route::resource('user-bonus', UserBonusController::class);
     Route::apiResource('cafe', CafeController::class);
     Route::apiResource('cafe-expense', CafeExpenseController::class);
     Route::apiResource('fine', FineController::class);

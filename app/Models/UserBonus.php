@@ -6,17 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class UserLoan extends Model
+class UserBonus extends Model
 {
     use HasFactory;
 
+    protected $table = 'user_bonuses';
+
     protected $fillable = [
-      'user_id',
-      'amount',
-      'purpose',
-      'installments',
-      'transferred_at',
-      'status',
+        'user_id',
+        'amount',
+        'date',
+        'details',
     ];
 
     public function user() : BelongsTo {

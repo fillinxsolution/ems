@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('installments', function (Blueprint $table) {
+        Schema::create('user_bonuses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_loan_id')->constrained()->cascadeOnDelete();
-            $table->text('purpose');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->unsignedInteger('amount');
             $table->date('date');
-            $table->enum('status', ['paid', 'pending'])->default('pending');
+            $table->text('details')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('installments');
+        Schema::dropIfExists('user_bonuses');
     }
 };

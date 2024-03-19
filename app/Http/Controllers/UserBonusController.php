@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Installment;
-use App\Models\User;
-use App\Models\UserLoan;
-use Carbon\Carbon;
+use App\Models\UserBonus;
+use App\Models\UserDetail;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class UserLoanController extends Controller
+class UserBonusController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +16,7 @@ class UserLoanController extends Controller
     public function index()
     {
         try {
-            $data = UserLoan::with('user')->get();
+            $data = UserBonus::with('user')->get();
             return $this->sendResponse($data, 200, ['Get List Successfully.'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
@@ -37,22 +35,19 @@ class UserLoanController extends Controller
         try {
             $this->validate($request, [
                 'amount' => 'required',
-                'purpose' => 'required',
-                'installments' => 'required',
-                'transferred_at' => 'required',
-                'status' => 'required',
+                'date' => 'required',
+                'details' => 'required',
                 'user_id' => 'required',
             ]);
 
-            $userLoan = UserLoan::create($request->only([
+            $userBonus = UserBonus::create($request->only([
                 'amount',
-                'installments',
-                'transferred_at',
-                'status',
+                'date',
+                'details',
                 'user_id',
             ]));
 
-            return $this->sendResponse($userLoan, 200, ['Stored Successfully.'], true);
+            return $this->sendResponse($userBonus, 200, ['Stored Successfully.'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
@@ -65,10 +60,10 @@ class UserLoanController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(UserLoan $userLoan)
+    public function show(UserBonus $userBonus)
     {
         try {
-            return $this->sendResponse($userLoan, 200, ['Data get successfully,'], true);
+            return $this->sendResponse($userBonus, 200, ['Data get successfully,'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
@@ -81,25 +76,23 @@ class UserLoanController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, UserLoan $userLoan)
+    public function update(Request $request, UserBonus $userBonus)
     {
         try {
             $this->validate($request, [
                 'amount' => 'required',
-                'purpose' => 'required',
-                'installments' => 'required',
-                'transferred_at' => 'required',
-                'status' => 'required',
+                'date' => 'required',
+                'details' => 'required',
+                'user_id' => 'required',
             ]);
-            $userLoan->update($request->only([
+            $userBonus->update($request->only([
                 'amount',
-                'installments',
-                'transferred_at',
-                'status',
+                'date',
+                'details',
                 'user_id',
             ]));
 
-            return $this->sendResponse($userLoan, 200, ['Updated successfully.'], true);
+            return $this->sendResponse($userBonus, 200, ['Updated successfully.'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
@@ -112,10 +105,10 @@ class UserLoanController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(UserLoan $userLoan)
+    public function destroy(UserBonus $userBonus)
     {
         try {
-            $userLoan->delete();
+            $userBonus->delete();
             return $this->sendResponse(null, 200, ['Record deleted successfully.'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
