@@ -27,7 +27,7 @@ class UserController extends Controller
     public function index()
     {
         try {
-            $users = User::with('roles')->get();
+            $users = User::with('roles')->paginate(10);
             return $this->sendResponse($users, 200, ['Users List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

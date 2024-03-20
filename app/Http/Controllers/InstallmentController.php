@@ -14,7 +14,7 @@ class InstallmentController extends Controller
     public function index()
     {
         try {
-            $installments = Installment::with('loan.user')->get();
+            $installments = Installment::with('loan.user')->paginate(10);
             return $this->sendResponse($installments, 200, ['Get List Successfully.'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());

@@ -22,7 +22,7 @@ class TransactionController extends Controller
                 }, 'account.user' => function($query) {
                     $query->select('id', 'name');
                 }]
-            )->get();
+            )->paginate(request()->all());
             return $this->sendResponse($trasections, 200, ['Transactions List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

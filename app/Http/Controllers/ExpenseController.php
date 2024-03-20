@@ -32,7 +32,7 @@ class ExpenseController extends Controller
                 }, 'expenseType' => function($query) {
                     $query->select('id', 'name');
                 }]
-            )->get();
+            )->paginate(10);
             return $this->sendResponse($expense, 200, ['Expenses List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

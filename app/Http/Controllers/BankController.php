@@ -22,10 +22,10 @@ class BankController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $banks = Bank::all();
+            $banks = Bank::paginate(10);
             return $this->sendResponse($banks, 200, ['Banks List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

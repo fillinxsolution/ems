@@ -24,7 +24,7 @@ class ExpenseTypeController extends Controller
     public function index()
     {
         try {
-            $accounts = ExpenseType::all();
+            $accounts = ExpenseType::paginate(10);
             return $this->sendResponse($accounts, 200, ['Expense Type List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
