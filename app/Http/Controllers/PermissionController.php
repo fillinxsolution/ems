@@ -21,7 +21,7 @@ class PermissionController extends Controller
     public function index()
     {
         try {
-            $permissions = Permission::where('guard_name', 'api')->get();
+            $permissions = Permission::where('guard_name', 'api')->paginate(10);
 
             return $this->sendResponse($permissions, 200, ['Permissions List'], true);
         } catch (QueryException $e) {

@@ -25,7 +25,7 @@ class AccountController extends Controller
     {
         try {
             // $user = auth()->user();
-            $accounts = Account::all();
+            $accounts = Account::paginate(10);
             return $this->sendResponse($accounts, 200, ['Accounts List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

@@ -15,7 +15,7 @@ class DepartmentController extends Controller
     public function index()
     {
         try {
-            $departments = Department::get();
+            $departments = Department::paginate(10);
             return $this->sendResponse($departments, 200, ['Get List Successfully.'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

@@ -21,7 +21,7 @@ class RoleController extends Controller
     public function index()
     {
         try {
-            $roles = Role::with('permissions')->get();
+            $roles = Role::with('permissions')->paginate(10);
             return $this->sendResponse($roles, 200, ['Roles List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

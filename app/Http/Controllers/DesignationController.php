@@ -15,7 +15,7 @@ class DesignationController extends Controller
     public function index()
     {
         try {
-            $designations = Designation::get();
+            $designations = Designation::paginate(10);
             return $this->sendResponse($designations, 200, ['Get List Successfully.'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

@@ -15,7 +15,7 @@ class ImportCsvController extends Controller
     public function index()
     {
         try {
-            $csv = ImportCsv::with('imports.user')->get();
+            $csv = ImportCsv::with('imports.user')->latest()->paginate(10);
             return $this->sendResponse($csv, 200, ['CSV List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

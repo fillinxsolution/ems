@@ -15,7 +15,7 @@ class CafeController extends Controller
     public function index()
     {
         try {
-            $cafes = Cafe::get();
+            $cafes = Cafe::paginate(10);
             return $this->sendResponse($cafes, 200, ['Get List Successfully.'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());

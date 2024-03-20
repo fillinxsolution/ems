@@ -14,7 +14,7 @@ class FineController extends Controller
     public function index()
     {
         try {
-            $fines = Fine::with('user')->get();
+            $fines = Fine::with('user')->paginate(10);
             return $this->sendResponse($fines, 200, ['Get List Successfully.'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());

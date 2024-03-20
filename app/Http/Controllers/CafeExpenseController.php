@@ -14,7 +14,7 @@ class CafeExpenseController extends Controller
     public function index()
     {
         try {
-            $cafes = CafeExpense::with('user')->get();
+            $cafes = CafeExpense::with('user')->paginate(10);
             return $this->sendResponse($cafes, 200, ['Get List Successfully.'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
