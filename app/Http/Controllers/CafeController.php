@@ -12,10 +12,11 @@ class CafeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $cafes = Cafe::paginate(10);
+            $cafes = Cafe::search(($request->search) ? $request->search : '')
+            ->paginate(($request->limit) ? $request->limit : 10);
             return $this->sendResponse($cafes, 200, ['Get List Successfully.'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());

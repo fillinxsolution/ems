@@ -12,7 +12,7 @@ class TransactionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
 
@@ -22,7 +22,8 @@ class TransactionController extends Controller
                 }, 'account.user' => function($query) {
                     $query->select('id', 'name');
                 }]
-            )->paginate(request()->all());
+            )->search(($request->search) ? $request->search : '')
+            ->paginate(($request->limit) ? $request->limit : 10);
             return $this->sendResponse($trasections, 200, ['Transactions List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

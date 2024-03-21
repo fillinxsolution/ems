@@ -21,10 +21,11 @@ class ExpenseTypeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $accounts = ExpenseType::paginate(10);
+            $accounts = ExpenseType::search(($request->search) ? $request->search : '')
+            ->paginate(($request->limit) ? $request->limit : 10);
             return $this->sendResponse($accounts, 200, ['Expense Type List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

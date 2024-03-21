@@ -11,10 +11,11 @@ class CafeExpenseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $cafes = CafeExpense::with('user')->paginate(10);
+            $cafes = CafeExpense::with('user')->search(($request->search) ? $request->search : '')
+            ->paginate(($request->limit) ? $request->limit : 10);
             return $this->sendResponse($cafes, 200, ['Get List Successfully.'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());

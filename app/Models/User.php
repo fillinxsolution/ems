@@ -29,6 +29,7 @@ class User extends Authenticatable
         'mobile_no',
         'password',
         'is_admin',
+        'salary',
         'empleado_id'
     ];
 
@@ -43,6 +44,17 @@ class User extends Authenticatable
         'created_at',
         'updated_at'
     ];
+
+    public function scopeSearch($query, $search)
+    {
+        if ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%' . $search . '%')
+                      ->orWhere('email', 'LIKE', '%' . $search . '%');
+            });
+        }
+        return $query;
+    }
 
     /**
      * The attributes that should be cast.
@@ -74,7 +86,7 @@ class User extends Authenticatable
     }
     public function imports()
     {
-        return $this->hasMany(ImportCsvDetail::class);
+        return $this->hasMany(ImportCsvDetail::class, 'user_id');
     }
 
     public function loans(): HasMany

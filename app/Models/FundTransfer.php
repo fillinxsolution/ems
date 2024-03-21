@@ -17,6 +17,22 @@ class FundTransfer extends Model
         'created_at',
         'udpated_at',
     ];
+
+    public function scopeSearch($query, $search)
+    {
+        if ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('date', 'LIKE', '%' . $search . '%')
+                ->orWhere('amount', 'LIKE', '%' . $search . '%')
+                ->orWhereHas('accountFrom', function ($query) use ($search) {
+                        $query->where('title', 'LIKE', '%' . $search . '%')
+                        ->orWhere('account_number', 'LIKE', '%' . $search . '%');
+                });
+            });
+        }
+        return $query;
+    }
+
     public function setDateAttribute($value)
     {
         $this->attributes['date'] = strtotime($value);

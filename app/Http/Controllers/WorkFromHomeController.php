@@ -12,10 +12,12 @@ class WorkFromHomeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $wfh = WorkFromHome::with('user')->get();
+            $wfh = WorkFromHome::with('user')
+            ->search(($request->search) ? $request->search : '')
+            ->paginate(($request->limit) ? $request->limit : 10);
             return $this->sendResponse($wfh, 200, ['Get List Successfully.'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());

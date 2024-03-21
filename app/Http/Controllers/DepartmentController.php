@@ -12,10 +12,11 @@ class DepartmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $departments = Department::paginate(10);
+            $departments = Department::search(($request->search) ? $request->search : '')
+            ->paginate(($request->limit) ? $request->limit : 10);
             return $this->sendResponse($departments, 200, ['Get List Successfully.'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

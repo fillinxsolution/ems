@@ -22,4 +22,16 @@ class CafeExpense extends Model
     public function user() : BelongsTo {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function scopeSearch($query, $search)
+    {
+        if ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('amount', 'LIKE', '%' . $search . '%')
+                      ->orWhere('details', 'LIKE', '%' . $search . '%')
+                      ->orWhere('date', 'LIKE', '%' . $search . '%');
+            });
+        }
+        return $query;
+    }
 }

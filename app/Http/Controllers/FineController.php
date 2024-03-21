@@ -11,10 +11,11 @@ class FineController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $fines = Fine::with('user')->paginate(10);
+            $fines = Fine::with('user')->search(($request->search) ? $request->search : '')
+            ->paginate(($request->limit) ? $request->limit : 10);
             return $this->sendResponse($fines, 200, ['Get List Successfully.'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());

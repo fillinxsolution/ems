@@ -21,11 +21,13 @@ class AccountController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
             // $user = auth()->user();
-            $accounts = Account::paginate(10);
+            $accounts = Account::with('bank')
+            ->search(($request->search) ? $request->search : '')
+            ->paginate(($request->limit) ? $request->limit : 10);
             return $this->sendResponse($accounts, 200, ['Accounts List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

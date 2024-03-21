@@ -16,6 +16,20 @@ class Transaction extends Model
         'udpated_at',
     ];
 
+    public function scopeSearch($query, $search)
+    {
+        if ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('date', 'LIKE', '%' . $search . '%')
+                ->orWhere('category', 'LIKE', '%' . $search . '%')
+                ->orWhereHas('account', function ($query) use ($search) {
+                        $query->where('title', 'LIKE', '%' . $search . '%')
+                        ->orWhere('account_number', 'LIKE', '%' . $search . '%');
+                });
+            });
+        }
+        return $query;
+    }
     public static function boot()
     {
         parent::boot();

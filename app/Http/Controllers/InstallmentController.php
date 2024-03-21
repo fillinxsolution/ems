@@ -11,10 +11,12 @@ class InstallmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $installments = Installment::with('loan.user')->paginate(10);
+            $installments = Installment::with('loan.user')
+            ->search(($request->search) ? $request->search : '')
+            ->paginate(($request->limit) ? $request->limit : 10);
             return $this->sendResponse($installments, 200, ['Get List Successfully.'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());

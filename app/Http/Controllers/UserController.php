@@ -24,10 +24,12 @@ class UserController extends Controller
         $this->middleware('permission:users-delete', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $users = User::with('roles')->paginate(10);
+            $users = User::with('roles')
+            ->search(($request->search) ? $request->search : '')
+            ->paginate(($request->limit) ? $request->limit : 10);
             return $this->sendResponse($users, 200, ['Users List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
@@ -128,10 +130,11 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $this->validate($request, [
-            'name'      => 'required'
+            'name'      => 'required',
+            'empleado_id' => 'required'
         ]);
         try {
-            $user->update(['name' => $request->name]);
+            $user->update(['name' => $request->name, 'empleado_id' => $request->empleado_id]);
             $user->assignRole($request->role);
             // $user->details()->update($request->details);
             return $this->sendResponse($user, 200, ['User Updated Successfully'], true);
