@@ -36,6 +36,22 @@ class BankController extends Controller
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
         }
     }
+    /**
+     * Display a all listing of the resource.
+     */
+    public function list(Request $request)
+    {
+        try {
+            $banks = Bank::where('status','1')->get();
+            return $this->sendResponse($banks, 200, ['Banks List'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
 
     /**
      * Show the form for creating a new resource.

@@ -94,6 +94,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::resource('user',         UserController::class);
     Route::resource('bank',         BankController::class);
+    Route::get('bank-list',         [BankController::class,'list']);
     Route::resource('account',      AccountController::class);
     Route::resource('expense_type', ExpenseTypeController::class);
     Route::resource('fund_transfer', FundTransferController::class);
