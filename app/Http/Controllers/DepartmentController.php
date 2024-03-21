@@ -34,7 +34,7 @@ class DepartmentController extends Controller
     {
         try {
             $this->validate($request, [
-                'title' => 'required',
+                'title' => 'required|unique:departments',
             ]);
             $department = Department::create($request->only(['title', 'description', 'status']));
 
@@ -70,7 +70,7 @@ class DepartmentController extends Controller
     public function update(Request $request, Department $department)
     {
         $this->validate($request, [
-            'title' => 'required',
+            'title' => "required|unique:departments,title,{$department->id}",
         ]);
         try {
             $department->update($request->only(['title', 'description', 'status']));

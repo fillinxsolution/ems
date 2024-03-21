@@ -34,7 +34,7 @@ class DesignationController extends Controller
     {
         try {
             $this->validate($request, [
-                'title' => 'required',
+                'title' => 'required|unique:designations',
                 'department_id' => 'required',
             ]);
             $designation = Designation::create($request->only(['title', 'description', 'status', 'department_id']));
@@ -71,7 +71,7 @@ class DesignationController extends Controller
     public function update(Request $request, Designation $designation)
     {
         $this->validate($request, [
-            'title' => 'required',
+            'title' => "required|unique:designations,title,{$designation->id}",
             'department_id' => 'required',
         ]);
         try {
