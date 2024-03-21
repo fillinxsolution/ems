@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\CafeController;
 use App\Http\Controllers\CafeExpenseController;
+use App\Http\Controllers\SalaryMonthController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\ExpenseController;
@@ -97,6 +98,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('bank-list',         [BankController::class,'list']);
     Route::resource('account',      AccountController::class);
     Route::resource('expense_type', ExpenseTypeController::class);
+    Route::get('expense_type_list', [ExpenseTypeController::class,'list']);
     Route::resource('fund_transfer', FundTransferController::class);
     Route::apiResource('csv',          ImportCsvController::class);
     // Route::get('expense', [ExpenseController::class, 'index']);
@@ -121,4 +123,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('fine', FineController::class);
     Route::apiResource('installment', InstallmentController::class);
     Route::apiResource('wfh', WorkFromHomeController::class);
+    Route::apiResource('salary-month', SalaryMonthController::class);
 });

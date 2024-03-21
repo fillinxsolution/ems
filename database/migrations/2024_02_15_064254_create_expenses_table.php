@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('salary_month_id')->references('id')->on('salary_months');
             $table->bigInteger('date');
             $table->enum('type',['Incoming','Outgoing']);
             $table->foreignId('expense_type_id')->references('id')->on('expense_types');
