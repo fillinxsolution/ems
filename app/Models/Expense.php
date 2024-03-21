@@ -17,6 +17,24 @@ class Expense extends Model
         'created_at',
         'udpated_at',
     ];
+
+    public function scopeSearch($query, $search)
+    {
+        if ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('date', 'LIKE', '%' . $search . '%')
+                ->orWhereHas('user', function ($query) use ($search) {
+                        $query->where('name', 'LIKE', '%' . $search . '%');
+                })
+                ->orWhereHas('account', function ($query) use ($search) {
+                        $query->where('title', 'LIKE', '%' . $search . '%')
+                        ->orWhere('account_number', 'LIKE', '%' . $search . '%');
+                });
+            });
+        }
+        return $query;
+    }
+
     public function user() {
         return $this->hasOne(User::class, 'id', 'user_id');
     }

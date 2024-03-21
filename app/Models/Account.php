@@ -18,6 +18,17 @@ class Account extends Model
         'udpated_at',
     ];
 
+    public function scopeSearch($query, $search)
+    {
+        if ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('title', 'LIKE', '%' . $search . '%')
+                      ->orWhere('account_number', 'LIKE', '%' . $search . '%');
+            });
+        }
+        return $query;
+    }
+
     public function bank(){
         return $this->belongsTo(Bank::class, 'bank_id');
     }

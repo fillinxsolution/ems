@@ -25,7 +25,8 @@ class BankController extends Controller
     public function index(Request $request)
     {
         try {
-            $banks = Bank::paginate(10);
+            $banks = Bank::search(($request->search) ? $request->search : '')
+            ->paginate(($request->limit) ? $request->limit : 10);
             return $this->sendResponse($banks, 200, ['Banks List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

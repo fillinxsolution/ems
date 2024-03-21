@@ -22,10 +22,12 @@ class FundTransferController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $fundTrasfer = FundTransfer::with('accountFrom','accountTo.user')->paginate(10);
+            $fundTrasfer = FundTransfer::with('accountFrom','accountTo.user')
+            ->search(($request->search) ? $request->search : '')
+            ->paginate(($request->limit) ? $request->limit : 10);
             return $this->sendResponse($fundTrasfer, 200, ['Funds List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

@@ -12,4 +12,16 @@ class Cafe extends Model
     protected $fillable = [
         'item', 'price', 'status'
     ];
+
+    public function scopeSearch($query, $search)
+    {
+        if ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('item', 'LIKE', '%' . $search . '%')
+                      ->orWhere('price', 'LIKE', '%' . $search . '%')
+                      ->orWhere('status', 'LIKE', '%' . $search . '%');
+            });
+        }
+        return $query;
+    }
 }

@@ -17,6 +17,16 @@ class Installment extends Model
         'status',
     ];
 
+    public function scopeSearch($query, $search)
+    {
+        if ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('date', 'LIKE', '%' . $search . '%')
+                ->orWhere('amount', 'LIKE', '%' . $search . '%');
+            });
+        }
+        return $query;
+    }
     public function loan(): BelongsTo
     {
         return $this->belongsTo(UserLoan::class, 'user_loan_id');

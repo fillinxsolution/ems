@@ -17,7 +17,6 @@ class UserDetail extends Model
         'birth_date',
         'blood_group',
         'phone_no',
-        'salary',
         'joining_date',
         'current_address',
         'permanent_address',

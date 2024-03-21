@@ -21,7 +21,7 @@ class ExpenseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
             $expense = Expense::with(
@@ -32,7 +32,8 @@ class ExpenseController extends Controller
                 }, 'expenseType' => function($query) {
                     $query->select('id', 'name');
                 }]
-            )->paginate(10);
+            )->search(($request->search) ? $request->search : '')
+            ->paginate(($request->limit) ? $request->limit : 10);
             return $this->sendResponse($expense, 200, ['Expenses List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
