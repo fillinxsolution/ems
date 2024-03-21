@@ -31,7 +31,7 @@ class CafeController extends Controller
     {
         try {
             $this->validate($request, [
-                'item' => 'required',
+                'item' => 'required|unique:cafes',
                 'price' => 'required',
             ]);
             $cafe = Cafe::create($request->only(['item', 'price', 'status']));
@@ -63,7 +63,7 @@ class CafeController extends Controller
     {
         try {
             $this->validate($request, [
-                'item' => 'required',
+                'item' => "required|unique:cafes,item,{$cafe->id}",
                 'price' => 'required',
             ]);
             $cafe->update($request->only(['item', 'price', 'status']));

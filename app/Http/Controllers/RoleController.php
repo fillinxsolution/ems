@@ -53,6 +53,9 @@ class RoleController extends Controller
     {
 
         try {
+            $this->validate($request, [
+                'name' => "required|unique:roles",
+            ]);
             $data = [
                 ...$request->only(['name']),
                 'guard_name' => 'api'
@@ -77,6 +80,9 @@ class RoleController extends Controller
     public function update(Request $request, Role $role)
     {
         try {
+            $this->validate($request, [
+                'name' => "required|unique:roles,name,{$role->id}",
+            ]);
             $data = [
                 ...$request->only(['name']),
                 'guard_name' => 'api'

@@ -51,7 +51,7 @@ class BankController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
+            'name' => 'required|unique:banks',
             'status' => 'required',
         ]);
         try {
@@ -96,7 +96,7 @@ class BankController extends Controller
     public function update(Request $request, Bank $bank)
     {
         $this->validate($request, [
-            'name' => 'required',
+            'name' => "required|unique:banks,name,{$bank->id}",
             'status' => 'required',
         ]);
         try {
