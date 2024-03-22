@@ -68,25 +68,11 @@ class SalaryMonthController extends Controller
      */
     public function update(Request $request, SalaryMonth $salaryMonth)
     {
-        $validator = Validator::make($request->all(), [
-            'month' => 'required',
-            'year' => 'required',
-            'name' => 'required',
+        $this->validate($request, [
             'status' => 'required',
         ]);
-        $validator->after(function ($validator) use ($request, $salaryMonth) {
-            $exists = SalaryMonth::where('month', $request->month)
-                ->where('year', $request->year)
-                ->exists();
-            if ($exists) {
-                $validator->errors()->add('month', 'The combination of month and year already exists.');
-            }
-        });
-        if ($validator->fails()) {
-            return $this->sendResponse(null, 500, $validator->errors(), false);
-        }
         try {
-            $salaryMonth->update($request->only(['name', 'month', 'year', 'status']));
+            $salaryMonth->update($request->only(['status']));
             return $this->sendResponse($salaryMonth, 200, ['Updated Successfully.'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
@@ -104,7 +90,7 @@ class SalaryMonthController extends Controller
     public function destroy(SalaryMonth $salaryMonth)
     {
         try {
-            $salaryMonth->delete();
+            $salaryMonth->where('status','0')->delete();
             return $this->sendResponse(null, 200, ['Record deleted successfully.'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
