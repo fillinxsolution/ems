@@ -17,8 +17,8 @@ class SalaryMonthController extends Controller
     public function index()
     {
         try {
-            $qualifications = SalaryMonth::where('status', '1')->get();
-            return $this->sendResponse($qualifications, 200, ['Get List Successfully.'], true);
+            $salaryMonth = SalaryMonth::where('status', '1')->get();
+            return $this->sendResponse($salaryMonth, 200, ['Get List Successfully.'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
