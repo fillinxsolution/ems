@@ -30,7 +30,8 @@ class ImportCsvDetail extends Model
         'cafe_deduction',
         'wfh',
         'bonus',
-        'month_salary'
+        'month_salary',
+        'salary_month_id'
     ];
 
 

@@ -16,6 +16,7 @@ class CafeExpense extends Model
         'amount',
         'quantity',
         'details',
+        'salary_month_id',
         'date',
     ];
 

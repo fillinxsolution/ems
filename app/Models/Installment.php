@@ -15,6 +15,7 @@ class Installment extends Model
         'amount',
         'date',
         'status',
+        'salary_month_id'
     ];
 
     public function scopeSearch($query, $search)

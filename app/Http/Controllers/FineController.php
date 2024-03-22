@@ -33,12 +33,14 @@ class FineController extends Controller
                 'user_id' => 'required',
                 'amount' => 'required',
                 'date' => 'required',
+                'salary_month_id' => 'required',
             ]);
             $fine = Fine::create($request->only([
                 'user_id',
                 'amount',
                 'details',
-                'date'
+                'date',
+                'salary_month_id'
             ]));
 
             return $this->sendResponse($fine, 200, ['Stored Successfully.'], true);
@@ -71,12 +73,14 @@ class FineController extends Controller
                 'user_id' => 'required',
                 'amount' => 'required',
                 'date' => 'required',
+                'salary_month_id' => 'required',
             ]);
             $fine->update($request->only([
                 'user_id',
                 'amount',
                 'details',
-                'date'
+                'date',
+                'salary_month_id'
             ]));
             return $this->sendResponse($fine, 200, ['Updated successfully.'], true);
         } catch (\Exception $e) {

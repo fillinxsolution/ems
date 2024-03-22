@@ -35,6 +35,7 @@ class CafeExpenseController extends Controller
                 'amount' => 'required',
                 'quantity' => 'required',
                 'date' => 'required',
+                'salary_month_id' => 'required',
             ]);
             $cafe = CafeExpense::create($request->only([
                 'user_id',
@@ -42,7 +43,8 @@ class CafeExpenseController extends Controller
                 'amount',
                 'quantity',
                 'details',
-                'date'
+                'date',
+                'salary_month_id'
             ]));
 
             return $this->sendResponse($cafe, 200, ['Stored Successfully.'], true);
@@ -77,6 +79,7 @@ class CafeExpenseController extends Controller
                 'amount' => 'required',
                 'quantity' => 'required',
                 'date' => 'required',
+                'salary_month_id' => 'required',
             ]);
             $cafeExpense->update($request->only([
                 'user_id',
@@ -84,7 +87,8 @@ class CafeExpenseController extends Controller
                 'amount',
                 'quantity',
                 'details',
-                'date'
+                'date',
+                'salary_month_id'
             ]));
             return $this->sendResponse($cafeExpense, 200, ['Updated successfully.'], true);
         } catch (\Exception $e) {
