@@ -51,8 +51,12 @@ class SalaryMonthController extends Controller
             return $this->sendResponse(null, 500, [$validator->errors()], false);
         }
         try {
+            $salaryMonthStatus = SalaryMonth::where('status','1')->count();
+            if ($salaryMonthStatus > 0)
+            {
+                return $this->sendResponse(null, 500, ['Please Close your previous salary month'], false);
+            }
             $salaryMonth = SalaryMonth::create($request->only(['name', 'month', 'year', 'status']));
-
             return $this->sendResponse($salaryMonth, 200, ['Stored Successfully.'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
