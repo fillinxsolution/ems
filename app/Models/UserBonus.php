@@ -17,6 +17,7 @@ class UserBonus extends Model
         'amount',
         'date',
         'details',
+        'salary_month_id'
     ];
 
     public function user() : BelongsTo {

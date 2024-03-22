@@ -14,7 +14,8 @@ class Fine extends Model
         'user_id',
         'amount',
         'date',
-        'details'
+        'details',
+        'salary_month_id'
     ];
 
     public function scopeSearch($query, $search)

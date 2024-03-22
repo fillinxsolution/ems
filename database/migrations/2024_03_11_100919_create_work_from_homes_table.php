@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('work_from_homes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('salary_month_id')->references('id')->on('salary_months')->cascadeOnDelete();
             $table->time('check_in');
             $table->time('check_out');
             $table->unsignedInteger('minutes');

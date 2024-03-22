@@ -35,12 +35,14 @@ class InstallmentController extends Controller
                 'amount' => 'required',
                 'date' => 'required',
                 'user_loan_id' => 'required',
+                'salary_month_id' => 'required',
             ]);
             $installment = Installment::create($request->only([
                 'user_loan_id',
                 'amount',
                 'date',
                 'status',
+                'salary_month_id',
             ]));
 
             return $this->sendResponse($installment, 200, ['Stored Successfully.'], true);
@@ -73,12 +75,14 @@ class InstallmentController extends Controller
                 'user_id' => 'required',
                 'amount' => 'required',
                 'date' => 'required',
+                'salary_month_id' => 'required',
             ]);
             $installment->update($request->only([
                 'user_loan_id',
                 'amount',
                 'date',
                 'status',
+                'salary_month_id',
             ]));
             return $this->sendResponse($installment, 200, ['Updated successfully.'], true);
         } catch (\Exception $e) {

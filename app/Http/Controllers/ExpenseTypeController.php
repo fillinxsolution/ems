@@ -37,6 +37,23 @@ class ExpenseTypeController extends Controller
     }
 
     /**
+     * Display all listing of the resource.
+     */
+    public function list()
+    {
+        try {
+            $accounts = ExpenseType::where('status','1')->get();
+            return $this->sendResponse($accounts, 200, ['Expense Type List'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()

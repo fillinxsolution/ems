@@ -13,7 +13,7 @@ class BankController extends Controller
 
     public function __construct()
     {
-        $this->middleware('permission:banks-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:banks-list', ['only' => ['index', 'show','list']]);
         $this->middleware('permission:banks-create|banks-edit', ['only' => ['store']]);
         $this->middleware('permission:banks-edit', ['only' => ['update']]);
         $this->middleware('permission:banks-delete', ['only' => ['destroy']]);
@@ -27,6 +27,22 @@ class BankController extends Controller
         try {
             $banks = Bank::search(($request->search) ? $request->search : '')
             ->paginate(($request->limit) ? $request->limit : 10);
+            return $this->sendResponse($banks, 200, ['Banks List'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
+    /**
+     * Display a all listing of the resource.
+     */
+    public function list()
+    {
+        try {
+            $banks = Bank::where('status','1')->get();
             return $this->sendResponse($banks, 200, ['Banks List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

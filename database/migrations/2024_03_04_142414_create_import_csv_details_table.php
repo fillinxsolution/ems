@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('import_csv_details', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreignId('salary_month_id')->references('id')->on('salary_months');
             $table->foreignId('import_csvs_id')->constrained()->cascadeOnDelete();
             $table->string('total_days')->nullable();
             $table->string('present_days')->nullable();

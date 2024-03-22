@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('fines', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('salary_month_id')->references('id')->on('salary_months')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->unsignedInteger('amount');
             $table->date('date');

@@ -38,6 +38,7 @@ class UserBonusController extends Controller
                 'date' => 'required',
                 'details' => 'required',
                 'user_id' => 'required',
+                'salary_month_id' => 'required',
             ]);
 
             $userBonus = UserBonus::create($request->only([
@@ -45,6 +46,7 @@ class UserBonusController extends Controller
                 'date',
                 'details',
                 'user_id',
+                'salary_month_id',
             ]));
 
             return $this->sendResponse($userBonus, 200, ['Stored Successfully.'], true);
@@ -84,12 +86,14 @@ class UserBonusController extends Controller
                 'date' => 'required',
                 'details' => 'required',
                 'user_id' => 'required',
+                'salary_month_id' => 'required',
             ]);
             $userBonus->update($request->only([
                 'amount',
                 'date',
                 'details',
                 'user_id',
+                'salary_month_id',
             ]));
 
             return $this->sendResponse($userBonus, 200, ['Updated successfully.'], true);

@@ -13,7 +13,8 @@ class ImportCsv extends Model
         'name',
         'path',
         'month',
-        'year'
+        'year',
+        'salary_month_id'
     ];
 
     public function imports(){

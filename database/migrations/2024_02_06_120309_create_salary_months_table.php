@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('import_csvs', function (Blueprint $table) {
+        Schema::create('salary_months', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('salary_month_id')->references('id')->on('salary_months');
             $table->string('name');
-            $table->string('path');
             $table->unsignedSmallInteger('month');
             $table->unsignedSmallInteger('year');
+            $table->enum('status',[0, 1]);
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('import_csvs');
+        Schema::dropIfExists('salary_months');
     }
 };

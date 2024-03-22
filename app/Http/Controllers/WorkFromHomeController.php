@@ -36,6 +36,7 @@ class WorkFromHomeController extends Controller
                 'check_in' => 'required',
                 'check_out' => 'required',
                 'date' => 'required',
+                'salary_month_id' => 'required',
             ]);
             $data = [...$request->all()];
             $startTime = Carbon::createFromFormat('H:i', $request->check_in);
@@ -75,6 +76,7 @@ class WorkFromHomeController extends Controller
                 'check_in' => 'required',
                 'check_out' => 'required',
                 'date' => 'required',
+                'salary_month_id' => 'required',
             ]);
             $data = [...$request->all()];
             $startTime = Carbon::createFromFormat('H:i', '10:00');

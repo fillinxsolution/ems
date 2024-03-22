@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\CreateSalaryJob;
 use App\Models\ImportCsv;
+use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -93,4 +95,23 @@ class ImportCsvController extends Controller
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
         }
     }
+
+    /**
+     * Generate Salary resource from storage.
+     */
+
+    public function salaryGenerate(Request $request)
+    {
+        try {
+            $this->validate($request, [
+                'id' => 'required',
+            ]);
+             dispatch(new CreateSalaryJob($request->id));
+            return $this->sendResponse(null, 200, ['Salary Generate successfully.'], true);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
+
 }

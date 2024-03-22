@@ -18,6 +18,7 @@ class WorkFromHome extends Model
         'date',
         'salary',
         'details',
+        'salary_month_id'
     ];
 
     public function scopeSearch($query, $search)

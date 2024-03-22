@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('cafe_expenses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('salary_month_id')->references('id')->on('salary_months')->cascadeOnDelete();
             $table->foreignId('cafe_id')->constrained()->cascadeOnDelete();
             $table->unsignedInteger('quantity')->default(1);
             $table->unsignedInteger('amount');

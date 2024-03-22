@@ -168,6 +168,7 @@ class UserController extends Controller
                 'file' => 'required|mimes:xlsx,xls',
                 'month' => 'required|numeric|between:1,12',
                 'year' => 'required|numeric|digits:4',
+                'salary_month_id' => 'required',
             ]);
 
             $file = $request->file('file');
@@ -183,6 +184,7 @@ class UserController extends Controller
                 'path' => $path,
                 'month' => $request->month,
                 'year' => $request->year,
+                'salary_month_id' => $request->salary_month_id,
             ]);
             // Process the Excel file
             Excel::import(new Import($import_csv->id), $file);
