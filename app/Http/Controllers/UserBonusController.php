@@ -50,7 +50,10 @@ class UserBonusController extends Controller
                 'user_id',
                 'salary_month_id',
             ]));
-            $this->csvUpdate($request->salary_month_id,$request->user_id);
+            $importCsvDetail = ImportCsvDetail::where('salary_month_id', $request->salary_month_id)->where('user_id', $request->user_id)->first();
+            if ($importCsvDetail) {
+                $this->csvUpdate($request->salary_month_id, $request->user_id, $importCsvDetail);
+            }
             return $this->sendResponse($userBonus, 200, ['Stored Successfully.'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
@@ -97,7 +100,10 @@ class UserBonusController extends Controller
                 'user_id',
                 'salary_month_id',
             ]));
-            $this->csvUpdate($request->salary_month_id,$request->user_id);
+            $importCsvDetail = ImportCsvDetail::where('salary_month_id', $request->salary_month_id)->where('user_id', $request->user_id)->first();
+            if ($importCsvDetail) {
+                $this->csvUpdate($request->salary_month_id, $request->user_id, $importCsvDetail);
+            }
 
             return $this->sendResponse($userBonus, 200, ['Updated successfully.'], true);
         } catch (QueryException $e) {
@@ -125,12 +131,10 @@ class UserBonusController extends Controller
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
         }
     }
-    public function csvUpdate($salary_month_id, $user_id)
+    public function csvUpdate($salary_month_id, $user_id,$importCsvDetail)
     {
-        $importCsv = ImportCsv::where('salary_month_id',$salary_month_id)->first();
-        if($importCsv){
-            $userBonus = UserBonus::where('salary_month_id',$salary_month_id)->where('user_id',$user_id)->sum('amount');
-            $importCsvDetail = ImportCsvDetail::where('salary_month_id',$salary_month_id)->where('user_id',$user_id)->first();
+        $userBonus = UserBonus::where('salary_month_id',$salary_month_id)->where('user_id',$user_id)->sum('amount');
+        if($importCsvDetail){
             $importCsvDetail->bonus = $userBonus;
             $importCsvDetail->save();
         }
