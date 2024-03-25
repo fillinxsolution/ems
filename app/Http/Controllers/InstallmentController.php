@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ImportCsv;
+use App\Models\ImportCsvDetail;
 use App\Models\Installment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -44,6 +46,7 @@ class InstallmentController extends Controller
                 'status',
                 'salary_month_id',
             ]));
+            $this->csvUpdate($request->salary_month_id,$request->user_id);
 
             return $this->sendResponse($installment, 200, ['Stored Successfully.'], true);
         } catch (\Exception $e) {
@@ -84,6 +87,8 @@ class InstallmentController extends Controller
                 'status',
                 'salary_month_id',
             ]));
+            $this->csvUpdate($request->salary_month_id,$request->user_id);
+
             return $this->sendResponse($installment, 200, ['Updated successfully.'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
@@ -102,6 +107,17 @@ class InstallmentController extends Controller
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
+
+    public function csvUpdate($salary_month_id, $user_id)
+    {
+        $importCsv = ImportCsv::where('salary_month_id',$salary_month_id)->first();
+        if($importCsv){
+            $instalment = Installment::where('salary_month_id',$salary_month_id)->where('user_id',$user_id)->sum('amount');
+            $importCsvDetail = ImportCsvDetail::where('salary_month_id',$salary_month_id)->where('user_id',$user_id)->first();
+            $importCsvDetail->loan_deduction = $instalment;
+            $importCsvDetail->save();
         }
     }
 }
