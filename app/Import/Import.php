@@ -34,8 +34,9 @@ class Import implements ToCollection {
 
             $emp_id = explode(" ", $new_row['employee'][0]);
             $emp_id = end($emp_id);
+            $emp_name = $emp_id[0];
             $user = User::where('empleado_id', $emp_id)->first();
-            // if($user){
+//             if($user){
                 $total_days     = isset($new_row['days'][2])    ? explode(" ", $new_row['days'][2] ?? "0")[0] : 0;
                 $present_days   = isset($new_row['days'][6])    ? explode(" ", $new_row['days'][6] ?? "0")[0] : 0;
                 $late_min       = isset($new_row['days'][10])   ? explode(" ", $new_row['days'][10] ?? "0")[0] : 0;
@@ -93,6 +94,8 @@ class Import implements ToCollection {
 
                 ImportCsvDetail::create([
                     "user_id" => ($user) ? $user->id : null,
+                    "name" => $emp_name,
+                    "empleado_id" => $emp_id,
                     "import_csvs_id" => $this->id,
                     "total_days" => $total_days,
                     "present_days" => $present_days,
@@ -108,7 +111,7 @@ class Import implements ToCollection {
                     "salary_month_id" => $this->salary_month,
 
                 ]);
-            // }
+//             }
         }
         // return $data;
     }

@@ -16,6 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreignId('salary_month_id')->references('id')->on('salary_months');
             $table->foreignId('import_csvs_id')->constrained()->cascadeOnDelete();
+            $table->string('empleado_id')->nullable();
+            $table->string('name')->nullable();
             $table->string('total_days')->nullable();
             $table->string('present_days')->nullable();
             $table->string('late_min')->nullable();
