@@ -40,6 +40,20 @@ class UserController extends Controller
         }
     }
 
+    public function list()
+    {
+        try {
+            $users = User::all();
+            return $this->sendResponse($users, 200, ['Users List'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
+
     public function show(User $user)
     {
         try {

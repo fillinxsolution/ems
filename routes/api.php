@@ -63,6 +63,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('permission',   PermissionController::class);
 
     Route::resource('user',         UserController::class);
+    Route::get('user-list', [UserController::class,'list']);
     Route::resource('bank',         BankController::class);
     Route::get('bank-list',         [BankController::class,'list']);
     Route::resource('account',      AccountController::class);
@@ -89,6 +90,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::resource('user-bonus', UserBonusController::class);
     Route::apiResource('cafe', CafeController::class);
+    Route::get('cafe-list', [CafeController::class,'list']);
     Route::apiResource('cafe-expense', CafeExpenseController::class);
     Route::apiResource('fine', FineController::class);
     Route::apiResource('installment', InstallmentController::class);
