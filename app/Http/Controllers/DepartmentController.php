@@ -28,6 +28,23 @@ class DepartmentController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     */
+    public function list()
+    {
+        try {
+            $departments = Department::where('status','1')->get();
+            return $this->sendResponse($departments, 200, ['Get List Successfully.'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
