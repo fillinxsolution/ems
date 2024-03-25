@@ -46,7 +46,10 @@ class WorkFromHomeController extends Controller
             $data['minutes'] = $endTime->diffInMinutes($startTime);
             $data['salary'] = 9;
             $wfh = WorkFromHome::create($data);
-            $this->csvUpdate($request->salary_month_id,$request->user_id);
+            $importCsvDetail = ImportCsvDetail::where('salary_month_id', $request->salary_month_id)->where('user_id', $request->user_id)->first();
+            if ($importCsvDetail) {
+                $this->csvUpdate($request->salary_month_id, $request->user_id, $importCsvDetail);
+            }
 
             return $this->sendResponse($wfh, 200, ['Stored Successfully.'], true);
         } catch (\Exception $e) {
@@ -87,7 +90,10 @@ class WorkFromHomeController extends Controller
             $data['minutes'] = $endTime->diffInMinutes($startTime);
             $data['salary'] = 9;
             $wfh->update($data);
-            $this->csvUpdate($request->salary_month_id,$request->user_id);
+            $importCsvDetail = ImportCsvDetail::where('salary_month_id', $request->salary_month_id)->where('user_id', $request->user_id)->first();
+            if ($importCsvDetail) {
+                $this->csvUpdate($request->salary_month_id, $request->user_id, $importCsvDetail);
+            }
             return $this->sendResponse($wfh, 200, ['Updated successfully.'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
@@ -109,12 +115,10 @@ class WorkFromHomeController extends Controller
         }
     }
 
-    public function csvUpdate($salary_month_id, $user_id)
+    public function csvUpdate($salary_month_id, $user_id,$importCsvDetail)
     {
-        $importCsv = ImportCsv::where('salary_month_id',$salary_month_id)->first();
-        if($importCsv){
-            $wfh = WorkFromHome::where('salary_month_id',$salary_month_id)->where('user_id',$user_id)->sum('minutes');
-            $importCsvDetail = ImportCsvDetail::where('salary_month_id',$salary_month_id)->where('user_id',$user_id)->first();
+        $wfh = WorkFromHome::where('salary_month_id',$salary_month_id)->where('user_id',$user_id)->sum('minutes');
+        if($importCsvDetail){
             $importCsvDetail->wfh = $wfh;
             $importCsvDetail->save();
         }

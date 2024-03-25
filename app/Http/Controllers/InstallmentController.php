@@ -17,8 +17,8 @@ class InstallmentController extends Controller
     {
         try {
             $installments = Installment::with('loan.user')
-            ->search(($request->search) ? $request->search : '')
-            ->paginate(($request->limit) ? $request->limit : 10);
+                ->search(($request->search) ? $request->search : '')
+                ->paginate(($request->limit) ? $request->limit : 10);
             return $this->sendResponse($installments, 200, ['Get List Successfully.'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
@@ -46,7 +46,10 @@ class InstallmentController extends Controller
                 'status',
                 'salary_month_id',
             ]));
-            $this->csvUpdate($request->salary_month_id,$request->user_id);
+            $importCsvDetail = ImportCsvDetail::where('salary_month_id', $request->salary_month_id)->where('user_id', $request->user_id)->first();
+            if ($importCsvDetail) {
+                $this->csvUpdate($request->salary_month_id, $request->user_id, $importCsvDetail);
+            }
 
             return $this->sendResponse($installment, 200, ['Stored Successfully.'], true);
         } catch (\Exception $e) {
@@ -87,7 +90,10 @@ class InstallmentController extends Controller
                 'status',
                 'salary_month_id',
             ]));
-            $this->csvUpdate($request->salary_month_id,$request->user_id);
+            $importCsvDetail = ImportCsvDetail::where('salary_month_id', $request->salary_month_id)->where('user_id', $request->user_id)->first();
+            if ($importCsvDetail) {
+                $this->csvUpdate($request->salary_month_id, $request->user_id, $importCsvDetail);
+            }
 
             return $this->sendResponse($installment, 200, ['Updated successfully.'], true);
         } catch (\Exception $e) {
@@ -110,12 +116,10 @@ class InstallmentController extends Controller
         }
     }
 
-    public function csvUpdate($salary_month_id, $user_id)
+    public function csvUpdate($salary_month_id, $user_id, $importCsvDetail)
     {
-        $importCsv = ImportCsv::where('salary_month_id',$salary_month_id)->first();
-        if($importCsv){
-            $instalment = Installment::where('salary_month_id',$salary_month_id)->where('user_id',$user_id)->sum('amount');
-            $importCsvDetail = ImportCsvDetail::where('salary_month_id',$salary_month_id)->where('user_id',$user_id)->first();
+        $instalment = Installment::where('salary_month_id', $salary_month_id)->where('user_id', $user_id)->sum('amount');
+        if ($importCsvDetail) {
             $importCsvDetail->loan_deduction = $instalment;
             $importCsvDetail->save();
         }
