@@ -25,7 +25,7 @@ class AccountController extends Controller
     {
         try {
             // $user = auth()->user();
-            $accounts = Account::with('bank')
+            $accounts = Account::with('bank','user')
             ->search(($request->search) ? $request->search : '')
             ->paginate(($request->limit) ? $request->limit : 10);
             return $this->sendResponse($accounts, 200, ['Accounts List'], true);

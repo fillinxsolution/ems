@@ -25,6 +25,20 @@ class CafeController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     */
+    public function list()
+    {
+        try {
+            $cafes = Cafe::where('status','1')->get();
+            return $this->sendResponse($cafes, 200, ['Get List Successfully.'], true);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)

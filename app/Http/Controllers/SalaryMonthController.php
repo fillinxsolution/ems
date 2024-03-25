@@ -76,6 +76,11 @@ class SalaryMonthController extends Controller
             'status' => 'required',
         ]);
         try {
+            $salaryMonthStatus = SalaryMonth::where('status','1')->count();
+            if ($salaryMonthStatus > 0)
+            {
+                return $this->sendResponse(null, 500, ['Please Close your previous salary month'], false);
+            }
             $salaryMonth->update($request->only(['status']));
             return $this->sendResponse($salaryMonth, 200, ['Updated Successfully.'], true);
         } catch (QueryException $e) {
