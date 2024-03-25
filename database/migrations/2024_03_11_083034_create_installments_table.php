@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('salary_month_id')->references('id')->on('salary_months')->cascadeOnDelete();
             $table->foreignId('user_loan_id')->constrained()->cascadeOnDelete();
-            $table->text('purpose');
             $table->unsignedInteger('amount');
             $table->date('date');
             $table->enum('status', ['paid', 'pending'])->default('pending');

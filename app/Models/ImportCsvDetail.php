@@ -31,7 +31,9 @@ class ImportCsvDetail extends Model
         'wfh',
         'bonus',
         'month_salary',
-        'salary_month_id'
+        'salary_month_id',
+        'name',
+        'empleado_id',
     ];
 
 
