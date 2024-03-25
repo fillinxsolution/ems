@@ -201,7 +201,7 @@ class UserController extends Controller
                 'salary_month_id' => $request->salary_month_id,
             ]);
             // Process the Excel file
-            Excel::import(new Import($import_csv->id), $file);
+            Excel::import(new Import($import_csv), $file);
 
             return $this->sendResponse(null, 200, ['Excel file imported successfully!'], true);
         } catch (QueryException $e) {

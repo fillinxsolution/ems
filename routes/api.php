@@ -76,6 +76,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Route::get('expense/{expense}', [ExpenseController::class, 'show']);
 
     Route::apiResource('department', DepartmentController::class);
+    Route::get('department-list', [DepartmentController::class,'list']);
     Route::apiResource('designation', DesignationController::class);
     Route::apiResource('qualification', QualificationController::class);
 
@@ -96,4 +97,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('installment', InstallmentController::class);
     Route::apiResource('wfh', WorkFromHomeController::class);
     Route::apiResource('salary-month', SalaryMonthController::class);
+    Route::get('salary-month-list', [SalaryMonthController::class,'list']);
 });

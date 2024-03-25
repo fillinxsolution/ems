@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Cafe extends Model
 {
@@ -23,5 +24,10 @@ class Cafe extends Model
             });
         }
         return $query;
+    }
+
+    public function cafeExpense(): HasMany
+    {
+        return $this->hasMany(CafeExpense::class, 'cafe_id');
     }
 }

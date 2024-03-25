@@ -17,6 +17,20 @@ class SalaryMonthController extends Controller
     public function index()
     {
         try {
+            $salaryMonth = SalaryMonth::all();
+            return $this->sendResponse($salaryMonth, 200, ['Get List Successfully.'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
+
+    public function list()
+    {
+        try {
             $salaryMonth = SalaryMonth::where('status', '1')->get();
             return $this->sendResponse($salaryMonth, 200, ['Get List Successfully.'], true);
         } catch (QueryException $e) {
@@ -27,6 +41,7 @@ class SalaryMonthController extends Controller
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
         }
     }
+
 
     /**
      * Store a newly created resource in storage.

@@ -35,4 +35,9 @@ class CafeExpense extends Model
         }
         return $query;
     }
+
+    public function cafe()
+    {
+        return $this->belongsTo(Cafe::class, 'cafe_id');
+    }
 }
