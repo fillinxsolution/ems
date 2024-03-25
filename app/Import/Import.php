@@ -9,8 +9,10 @@ use Illuminate\Support\Str;
 
 class Import implements ToCollection {
     public $id = '';
-    public function __construct($id) {
-        $this->id = $id;
+    public $salary_month = '';
+    public function __construct($import_csv) {
+        $this->id = $import_csv->id;
+        $this->salary_month = $import_csv->salary_month_id;
     }
     public function collection(Collection $rows) {
         $data = [];
@@ -103,6 +105,7 @@ class Import implements ToCollection {
                     "earned_min" => $earned_min,
                     "overtime_hrs" => $overtime_hrs,
                     "overtime_min" => $overtime_min,
+                    "salary_month_id" => $this->salary_month,
 
                 ]);
             // }
