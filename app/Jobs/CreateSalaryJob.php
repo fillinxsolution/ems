@@ -46,10 +46,17 @@ class CreateSalaryJob implements ShouldQueue
 
                 $total_earned_minuts = $earned_hours_in_min + $earned_min;
 
+                $wfh = ($import->wfh) ? round($per_min_salary * $import->wfh, 2) : 0;
+                $loan_deduction = ($import->loan_deduction) ? $import->loan_deduction : 0;
+                $cafe_deduction = ($import->cafe_deduction) ? $import->cafe_deduction : 0;
+                $fine_deduction = ($import->fine_deduction) ? $import->fine_deduction : 0;
+                $bonus = ($import->bonus) ? $import->bonus : 0;
+                $m_salary = round($per_min_salary * $total_earned_minuts, 2);
+                $t_salary =  ($m_salary + $bonus + $wfh) -  ($loan_deduction + $cafe_deduction + $fine_deduction);
                 $import->update([
                     'earned_time_in_min' => $total_earned_minuts,
                     'salary_in_min' => $per_min_salary,
-                    'month_salary' => round($per_min_salary * $total_earned_minuts, 2)
+                    'month_salary' => $t_salary
                 ]);
 
             }
