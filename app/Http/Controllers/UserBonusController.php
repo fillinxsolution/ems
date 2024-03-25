@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ImportCsv;
+use App\Models\ImportCsvDetail;
 use App\Models\UserBonus;
 use App\Models\UserDetail;
 use Illuminate\Database\QueryException;
@@ -48,7 +50,7 @@ class UserBonusController extends Controller
                 'user_id',
                 'salary_month_id',
             ]));
-
+            $this->csvUpdate($request->salary_month_id,$request->user_id);
             return $this->sendResponse($userBonus, 200, ['Stored Successfully.'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
@@ -95,6 +97,7 @@ class UserBonusController extends Controller
                 'user_id',
                 'salary_month_id',
             ]));
+            $this->csvUpdate($request->salary_month_id,$request->user_id);
 
             return $this->sendResponse($userBonus, 200, ['Updated successfully.'], true);
         } catch (QueryException $e) {
@@ -120,6 +123,16 @@ class UserBonusController extends Controller
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
+    public function csvUpdate($salary_month_id, $user_id)
+    {
+        $importCsv = ImportCsv::where('salary_month_id',$salary_month_id)->first();
+        if($importCsv){
+            $userBonus = UserBonus::where('salary_month_id',$salary_month_id)->where('user_id',$user_id)->sum('amount');
+            $importCsvDetail = ImportCsvDetail::where('salary_month_id',$salary_month_id)->where('user_id',$user_id)->first();
+            $importCsvDetail->bonus = $userBonus;
+            $importCsvDetail->save();
         }
     }
 }

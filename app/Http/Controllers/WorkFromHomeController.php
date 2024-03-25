@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ImportCsv;
+use App\Models\ImportCsvDetail;
 use App\Models\WorkFromHome;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -44,6 +46,7 @@ class WorkFromHomeController extends Controller
             $data['minutes'] = $endTime->diffInMinutes($startTime);
             $data['salary'] = 9;
             $wfh = WorkFromHome::create($data);
+            $this->csvUpdate($request->salary_month_id,$request->user_id);
 
             return $this->sendResponse($wfh, 200, ['Stored Successfully.'], true);
         } catch (\Exception $e) {
@@ -84,6 +87,7 @@ class WorkFromHomeController extends Controller
             $data['minutes'] = $endTime->diffInMinutes($startTime);
             $data['salary'] = 9;
             $wfh->update($data);
+            $this->csvUpdate($request->salary_month_id,$request->user_id);
             return $this->sendResponse($wfh, 200, ['Updated successfully.'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
@@ -102,6 +106,17 @@ class WorkFromHomeController extends Controller
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
+
+    public function csvUpdate($salary_month_id, $user_id)
+    {
+        $importCsv = ImportCsv::where('salary_month_id',$salary_month_id)->first();
+        if($importCsv){
+            $wfh = WorkFromHome::where('salary_month_id',$salary_month_id)->where('user_id',$user_id)->sum('minutes');
+            $importCsvDetail = ImportCsvDetail::where('salary_month_id',$salary_month_id)->where('user_id',$user_id)->first();
+            $importCsvDetail->wfh = $wfh;
+            $importCsvDetail->save();
         }
     }
 }
