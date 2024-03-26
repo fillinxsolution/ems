@@ -44,7 +44,6 @@ class WorkFromHomeController extends Controller
                 'user_id' => 'required',
                 'check_in' => 'required',
                 'check_out' => 'required',
-                'date' => 'required',
                 'salary_month_id' => 'required',
             ]);
             $data = [...$request->all()];

@@ -15,7 +15,6 @@ class WorkFromHome extends Model
         'check_in',
         'check_out',
         'minutes',
-        'date',
         'salary',
         'details',
         'salary_month_id'
