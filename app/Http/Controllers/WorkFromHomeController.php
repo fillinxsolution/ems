@@ -44,14 +44,14 @@ class WorkFromHomeController extends Controller
                 'user_id' => 'required',
                 'check_in' => 'required',
                 'check_out' => 'required',
-                'date' => 'required',
                 'salary_month_id' => 'required',
             ]);
             $data = [...$request->all()];
-            $startTime = Carbon::createFromFormat('Y-m-d H:i', $request->check_in);
-            $endTime = Carbon::createFromFormat('Y-m-d H:i', $request->check_out);
+            $startTime = Carbon::createFromFormat('Y-m-d\TH:i', $request->check_in);
+            $endTime = Carbon::createFromFormat('Y-m-d\TH:i', $request->check_out);
             $data['minutes'] = $endTime->diffInMinutes($startTime);
             $data['salary'] = 9;
+            $data['date'] = $startTime->format('Y-m-d');
             $wfh = WorkFromHome::create($data);
             $importCsvDetail = ImportCsvDetail::where('salary_month_id', $request->salary_month_id)->where('user_id', $request->user_id)->first();
             if ($importCsvDetail) {

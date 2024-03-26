@@ -212,4 +212,21 @@ class UserController extends Controller
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
         }
     }
+
+    public function salaryDetail(Request $request)
+    {
+        try {
+            $request->validate([
+                'user_id' => 'required',
+            ]);
+            $importDetail = ImportCsvDetail::where('user_id',$request->user_id)->orderBy('salary_month_id', 'desc')->get();
+            return $this->sendResponse($importDetail, 200, ['Users List'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
 }

@@ -54,6 +54,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('kharcha/store', [ExpenseController::class, 'store']);
     Route::get('user/accounts', [UserController::class, 'accounts']);
     Route::get('user/expenses', [UserController::class, 'expenses']);
+    Route::get('user/salary-detail', [UserController::class, 'salaryDetail']);
     Route::get('user/transections', [UserController::class, 'transections']);
     Route::get('fund_transfer/create', [FundTransferController::class, 'create']);
     Route::post('/import', [UserController::class, 'import']);
