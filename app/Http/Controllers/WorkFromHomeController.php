@@ -48,8 +48,8 @@ class WorkFromHomeController extends Controller
                 'salary_month_id' => 'required',
             ]);
             $data = [...$request->all()];
-            $startTime = Carbon::createFromFormat('Y-m-d H:i', $request->check_in);
-            $endTime = Carbon::createFromFormat('Y-m-d H:i', $request->check_out);
+            $startTime = Carbon::createFromFormat('Y-m-d\TH:i', $request->check_in);
+            $endTime = Carbon::createFromFormat('Y-m-d\TH:i', $request->check_out);
             $data['minutes'] = $endTime->diffInMinutes($startTime);
             $data['salary'] = 9;
             $wfh = WorkFromHome::create($data);
