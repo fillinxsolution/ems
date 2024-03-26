@@ -4,28 +4,35 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
-class PermissionsSeeder extends Seeder
+class RolesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
+        $role1 = Role::create(['name' => 'Super Admin',
+            'guard_name' => 'api'
+        ]);
+        $permissions = Permission::where('guard_name', 'api')->get();
+        $role1->syncPermissions($permissions);
+
+
+        $role2 = Role::create(['name' => 'HR',
+            'guard_name' => 'api'
+        ]);
         $permissions = [
             'banks-list',
             'banks-view',
             'banks-create',
             'banks-edit',
-            'banks-delete',
 
             'account-list',
             'account-view',
             'account-create',
-            'account-edit',
-            'account-delete',
 
             'users-list',
             'users-view',
@@ -37,34 +44,16 @@ class PermissionsSeeder extends Seeder
             'expense-type-view',
             'expense-type-create',
             'expense-type-edit',
-            'expense-type-delete',
 
             'expense-list',
             'expense-view',
             'expense-create',
-            'expense-edit',
-            'expense-delete',
-
-            'roles-list',
-            'roles-view',
-            'roles-create',
-            'roles-edit',
-            'roles-delete',
-
-            'permission-list',
-            'permission-view',
-            'permission-create',
-            'permission-edit',
-            'permission-delete',
 
             'transfer-list',
             'transfer-view',
             'transfer-create',
             'transfer-edit',
             'transfer-delete',
-
-            'settings-list',
-            'settings-create',
 
             'department-list',
             'department-view',
@@ -82,14 +71,10 @@ class PermissionsSeeder extends Seeder
             'user-loan-list',
             'user-loan-view',
             'user-loan-create',
-            'user-loan-edit',
-            'user-loan-delete',
 
             'user-bonus-list',
             'user-bonus-view',
             'user-bonus-create',
-            'user-bonus-edit',
-            'user-bonus-delete',
 
             'wfh-list',
             'wfh-view',
@@ -119,16 +104,12 @@ class PermissionsSeeder extends Seeder
             'salary-month',
             'salary-month-list',
             'salary-month-view',
-            'salary-month-create',
-            'salary-month-edit',
-            'salary-month-delete',
 
             'salary-management',
             'salary-management-list',
             'salary-management-view',
             'salary-management-create',
             'salary-management-edit',
-            'salary-management-delete',
 
 
             'installments-list',
@@ -145,9 +126,16 @@ class PermissionsSeeder extends Seeder
             'qualifications-delete',
 
         ];
+        $role2->syncPermissions($permissions);
 
-        foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission, 'guard_name' => 'api']);
-        }
+        $role3 = Role::create(['name' => 'Developer',
+            'guard_name' => 'api'
+        ]);
+        $permissions = [
+            'banks-list', 'account-list', 'user-bonus-list',
+            'wfh-list', 'fine-list', 'cafe-list', 'salary-month-list'];
+        $role3->syncPermissions($permissions);
+
+
     }
 }

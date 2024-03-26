@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Log;
 
 class WorkFromHomeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:wfh-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:wfh-create|account-edit', ['only' => ['store']]);
+        $this->middleware('permission:wfh-edit', ['only' => ['update']]);
+        $this->middleware('permission:wfh-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -41,8 +48,8 @@ class WorkFromHomeController extends Controller
                 'salary_month_id' => 'required',
             ]);
             $data = [...$request->all()];
-            $startTime = Carbon::createFromFormat('H:i', $request->check_in);
-            $endTime = Carbon::createFromFormat('H:i', $request->check_out);
+            $startTime = Carbon::createFromFormat('Y-m-d H:i', $request->check_in);
+            $endTime = Carbon::createFromFormat('Y-m-d H:i', $request->check_out);
             $data['minutes'] = $endTime->diffInMinutes($startTime);
             $data['salary'] = 9;
             $wfh = WorkFromHome::create($data);

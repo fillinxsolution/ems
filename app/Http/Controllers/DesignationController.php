@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Log;
 
 class DesignationController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:designation-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:designation-create|account-edit', ['only' => ['store']]);
+        $this->middleware('permission:designation-edit', ['only' => ['update']]);
+        $this->middleware('permission:designation-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      */

@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Log;
 
 class CafeController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:cafe-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:cafe-create|account-edit', ['only' => ['store']]);
+        $this->middleware('permission:cafe-edit', ['only' => ['update']]);
+        $this->middleware('permission:cafe-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      */
