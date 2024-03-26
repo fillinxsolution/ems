@@ -18,6 +18,7 @@ return new class extends Migration
             $table->dateTime('check_in');
             $table->dateTime('check_out');
             $table->unsignedInteger('minutes');
+            $table->date('date');
             $table->unsignedInteger('salary');
             $table->text('details')->nullable();
             $table->timestamps();
