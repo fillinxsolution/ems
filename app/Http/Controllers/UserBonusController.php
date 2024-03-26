@@ -22,10 +22,11 @@ class UserBonusController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $data = UserBonus::with('user')->get();
+            $data = UserBonus::with('user')->search(($request->search) ? $request->search : '')
+                ->paginate(($request->limit) ? $request->limit : 10);
             return $this->sendResponse($data, 200, ['Get List Successfully.'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
