@@ -20,6 +20,19 @@ class UserBonus extends Model
         'salary_month_id'
     ];
 
+    public function scopeSearch($query, $search)
+    {
+        if ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('date', 'LIKE', '%' . $search . '%')
+                    ->orWhereHas('user', function ($query) use ($search) {
+                        $query->where('name', 'LIKE', '%' . $search . '%');
+                    });
+            });
+        }
+        return $query;
+    }
+
     public function user() : BelongsTo {
         return $this->belongsTo(User::class, 'user_id');
     }
