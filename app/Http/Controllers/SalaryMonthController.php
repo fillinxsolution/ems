@@ -92,7 +92,8 @@ class SalaryMonthController extends Controller
         ]);
         try {
             $salaryMonthStatus = SalaryMonth::where('status','1')->count();
-            if ($salaryMonthStatus > 0)
+
+            if ($salaryMonthStatus > 1)
             {
                 return $this->sendResponse(null, 500, ['Please Close your previous salary month'], false);
             }
@@ -114,8 +115,13 @@ class SalaryMonthController extends Controller
     public function destroy(SalaryMonth $salaryMonth)
     {
         try {
-            $salaryMonth->where('status','0')->delete();
-            return $this->sendResponse(null, 200, ['Record deleted successfully.'], true);
+            if($salaryMonth->status == '1'){
+                $salaryMonth->delete();
+                return $this->sendResponse(null, 200, ['Record deleted successfully.'], true);
+            }else{
+                return $this->sendResponse(null, 200, ['Salary month is not an active salary month.'], true);
+            }
+
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
