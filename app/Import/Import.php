@@ -32,9 +32,9 @@ class Import implements ToCollection {
         foreach($data as $new_row ) {
 
 
-            $emp_id = explode(" ", $new_row['employee'][0]);
-            $emp_id = end($emp_id);
-            $emp_name = $emp_id[0];
+            $empolye = explode(" ", $new_row['employee'][0]);
+            $emp_id = end($empolye);
+            $emp_name = $empolye[0];
             $user = User::where('empleado_id', $emp_id)->first();
 //             if($user){
                 $total_days     = isset($new_row['days'][2])    ? explode(" ", $new_row['days'][2] ?? "0")[0] : 0;
