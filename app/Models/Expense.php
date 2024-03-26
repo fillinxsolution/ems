@@ -11,7 +11,7 @@ class Expense extends Model
     use HasFactory, BankingTransactions;
 
 
-    protected $fillable = ['user_id', 'date', 'type', 'expense_type_id', 'account_id', 'status', 'details',  'amount'];
+    protected $fillable = ['user_id', 'date', 'type', 'salary_month_id', 'expense_type_id', 'account_id', 'status', 'details',  'amount'];
 
     protected $hidden = [
         'created_at',

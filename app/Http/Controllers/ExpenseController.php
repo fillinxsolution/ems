@@ -64,7 +64,8 @@ class ExpenseController extends Controller
             'account_id' => 'required',
             'status' => 'required',
             'details' => 'required',
-            'amount' => 'required'
+            'amount' => 'required',
+            'salary_month_id' => 'required'
         ]);
 
         try {
@@ -121,6 +122,7 @@ class ExpenseController extends Controller
             'account_id' => 'required',
             'status' => 'required',
             'details' => 'required',
+            'salary_month_id' => 'required',
             'amount' => 'required'
         ]);
         try {
