@@ -17,7 +17,10 @@ class ImportCsvController extends Controller
     public function index()
     {
         try {
-            $csv = ImportCsv::with('imports.user')->latest()->paginate(10);
+            $csv = ImportCsv::with(['imports' => function($query) {
+                $query->select('name', 'expected_hrs','expected_min', 'earned_hrs', 'earned_min',
+                'overtime_hrs','overtime_min','loan_deduction','fine_deduction','cafe_deduction','wfh','bonus','month_salary');
+            }, 'imports.user'])->latest()->paginate(10);;
             return $this->sendResponse($csv, 200, ['CSV List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
