@@ -12,6 +12,14 @@ use Illuminate\Support\Facades\Log;
 
 class UserLoanController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:user-loan-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:user-loan-create|account-edit', ['only' => ['store']]);
+        $this->middleware('permission:user-loan-edit', ['only' => ['update']]);
+        $this->middleware('permission:user-loan-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      */

@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Log;
 
 class DepartmentController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:department-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:department-create|account-edit', ['only' => ['store']]);
+        $this->middleware('permission:department-edit', ['only' => ['update']]);
+        $this->middleware('permission:department-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      */

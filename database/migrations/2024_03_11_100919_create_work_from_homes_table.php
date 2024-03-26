@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('salary_month_id')->references('id')->on('salary_months')->cascadeOnDelete();
-            $table->time('check_in');
-            $table->time('check_out');
+            $table->dateTime('check_in');
+            $table->dateTime('check_out');
             $table->unsignedInteger('minutes');
             $table->date('date');
             $table->unsignedInteger('salary');

@@ -12,6 +12,13 @@ use Illuminate\Support\Facades\Log;
 
 class UserBonusController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:user-bonus-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:user-bonus-create|account-edit', ['only' => ['store']]);
+        $this->middleware('permission:user-bonus-edit', ['only' => ['update']]);
+        $this->middleware('permission:user-bonus-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      */
