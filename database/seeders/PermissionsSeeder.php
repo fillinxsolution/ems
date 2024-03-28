@@ -138,6 +138,14 @@ class PermissionsSeeder extends Seeder
             'installments-delete',
 
 
+            'transaction-list',
+            'transaction-view',
+            'transaction-create',
+            'transaction-edit',
+            'transaction-delete',
+            'all-transaction-list',
+
+
             'qualifications-list',
             'qualifications-view',
             'qualifications-create',

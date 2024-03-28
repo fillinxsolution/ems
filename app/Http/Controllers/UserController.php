@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UsersExport;
 use App\Import\Import;
 use App\Models\ImportCsv;
 use App\Models\ImportCsvDetail;
@@ -234,5 +235,10 @@ class UserController extends Controller
             Log::error('Error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
         }
+    }
+
+    public function userExport()
+    {
+        return Excel::download(new UsersExport(), 'users.xlsx');
     }
 }
