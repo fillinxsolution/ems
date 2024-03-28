@@ -28,8 +28,11 @@ class UserController extends Controller
     {
         try {
             $users = User::with('roles')
-            ->search(($request->search) ? $request->search : '')
-            ->paginate(($request->limit) ? $request->limit : 10);
+                ->whereDoesntHave('roles', function($query) {
+                    $query->where('name', 'Super Admin'); // Assuming the role name is stored in the 'name' column
+                })
+                ->search($request->search ?? '')
+                ->paginate($request->limit ?? 10);
             return $this->sendResponse($users, 200, ['Users List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
@@ -43,7 +46,10 @@ class UserController extends Controller
     public function list()
     {
         try {
-            $users = User::all();
+            $users = User::with('roles')
+                ->whereDoesntHave('roles', function($query) {
+                    $query->where('name', 'Super Admin'); // Assuming the role name is stored in the 'name' column
+                })->get();
             return $this->sendResponse($users, 200, ['Users List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
@@ -119,7 +125,7 @@ class UserController extends Controller
             $request->validate([
                 'name'      => 'required',
                 'email'     => 'required|unique:users,email',
-                'cnic'     => 'required|unique:users,cnic',
+//                'cnic'     => 'required|unique:users,cnic',
                 'password'  => 'required|confirmed',
             ]);
             $user = User::create($request->all());
