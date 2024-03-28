@@ -56,6 +56,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('user/expenses', [UserController::class, 'expenses']);
     Route::get('user/salary-detail', [UserController::class, 'salaryDetail']);
     Route::get('user/transections', [UserController::class, 'transections']);
+    Route::get('user/export', [UserController::class, 'userExport']);
     Route::get('fund_transfer/create', [FundTransferController::class, 'create']);
     Route::post('/import', [UserController::class, 'import']);
 
