@@ -44,4 +44,9 @@ class ImportCsvDetail extends Model
     public function import_csv(){
         return $this->belongsTo(ImportCsv::class, 'import_csvs_id');
     }
+
+    public function salaryMonth()
+    {
+        return $this->belongsTo(SalaryMonth::class, 'salary_month_id');
+    }
 }

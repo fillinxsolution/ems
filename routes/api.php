@@ -71,6 +71,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('account',      AccountController::class);
     Route::resource('expense_type', ExpenseTypeController::class);
     Route::get('expense_type_list', [ExpenseTypeController::class,'list']);
+    Route::get('expense_filter_list', [ExpenseTypeController::class,'filter']);
     Route::resource('fund_transfer', FundTransferController::class);
     Route::apiResource('csv',          ImportCsvController::class);
     Route::post('salary-generate',         [ImportCsvController::class,'salaryGenerate']);
