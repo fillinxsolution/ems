@@ -74,6 +74,7 @@ class ExpenseTypeController extends Controller
                     $expenseType = Expense::with('expenseType')->where('user_id',$user->id)->whereBetween('date', [$request->start_date, $request->end_date])->get();
                 }
             }
+            $expenseType = $expenseType->paginate(($request->limit) ? $request->limit : 10);
 
             return $this->sendResponse($expenseType, 200, ['Expense Type List'], true);
         } catch (QueryException $e) {
