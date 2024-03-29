@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expense;
 use App\Models\ExpenseType;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -24,9 +25,9 @@ class ExpenseTypeController extends Controller
     public function index(Request $request)
     {
         try {
-            $accounts = ExpenseType::search(($request->search) ? $request->search : '')
+            $expenseTypes = ExpenseType::search(($request->search) ? $request->search : '')
             ->paginate(($request->limit) ? $request->limit : 10);
-            return $this->sendResponse($accounts, 200, ['Expense Type List'], true);
+            return $this->sendResponse($expenseTypes, 200, ['Expense Type List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
@@ -36,14 +37,61 @@ class ExpenseTypeController extends Controller
         }
     }
 
+
+    public function filter(Request $request)
+    {
+        try {
+            $user = auth('sanctum')->user();
+            if (($user->hasRole('Super Admin') || $user->hasRole('Admin')) && $user->is_admin = 1)
+            {
+                $expenseType = Expense::with('expenseType')->get();
+                if ($request->date)
+                {
+                    $expenseType = Expense::with('expenseType')->whereDate('date',$request->date)->get();
+                }
+                if ($request->expense_type_id)
+                {
+                    $expenseType = Expense::with('expenseType')->where('expense_type_id',$request->expense_type_id)->get();
+                }
+                if($request->start_date && $request->end_date)
+                {
+                    $expenseType = Expense::with('expenseType')->whereBetween('date', [$request->start_date, $request->end_date])->get();
+                }
+            }
+            if ($user->hasRole('HR') && $user->is_admin = 1)
+            {
+                $expenseType = Expense::with('expenseType')->where('user_id',$user->id)->get();
+                if ($request->date)
+                {
+                    $expenseType = Expense::with('expenseType')->where('user_id',$user->id)->whereDate('date',$request->date)->get();
+                }
+                if ($request->expense_type_id)
+                {
+                    $expenseType = Expense::with('expenseType')->where('user_id',$user->id)->where('expense_type_id',$request->expense_type_id)->get();
+                }
+                if($request->start_date && $request->end_date)
+                {
+                    $expenseType = Expense::with('expenseType')->where('user_id',$user->id)->whereBetween('date', [$request->start_date, $request->end_date])->get();
+                }
+            }
+
+            return $this->sendResponse($expenseType, 200, ['Expense Type List'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
     /**
      * Display all listing of the resource.
      */
     public function list()
     {
         try {
-            $accounts = ExpenseType::where('status','1')->get();
-            return $this->sendResponse($accounts, 200, ['Expense Type List'], true);
+            $expenseTypes = ExpenseType::where('status','1')->get();
+            return $this->sendResponse($expenseTypes, 200, ['Expense Type List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
@@ -72,8 +120,8 @@ class ExpenseTypeController extends Controller
             'details' => 'required',
         ]);
         try {
-            $account = ExpenseType::create($request->all());
-            return $this->sendResponse($account, 200, ['Expense Type Created Successfully'], true);
+            $expenseType = ExpenseType::create($request->all());
+            return $this->sendResponse($expenseType, 200, ['Expense Type Created Successfully'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);

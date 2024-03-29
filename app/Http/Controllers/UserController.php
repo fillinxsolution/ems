@@ -226,7 +226,7 @@ class UserController extends Controller
             $request->validate([
                 'user_id' => 'required',
             ]);
-            $importDetail = ImportCsvDetail::with('user')->where('user_id',$request->user_id)->orderBy('salary_month_id', 'desc')->get();
+            $importDetail = ImportCsvDetail::with(['user','salaryMonth'])->where('user_id',$request->user_id)->orderBy('salary_month_id', 'desc')->get();
             return $this->sendResponse($importDetail, 200, ['Users List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
