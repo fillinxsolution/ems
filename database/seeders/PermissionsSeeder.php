@@ -44,6 +44,7 @@ class PermissionsSeeder extends Seeder
             'expense-create',
             'expense-edit',
             'expense-delete',
+            'all-expense-list',
 
             'roles-list',
             'roles-view',

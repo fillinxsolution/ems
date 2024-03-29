@@ -43,13 +43,12 @@ class ExpenseTypeController extends Controller
         try {
             $user = auth('sanctum')->user();
 
+            $date = ($request->date) ? strtotime($request->date) : null;
+            $start_date = ($request->start_date) ? strtotime($request->start_date) : null;
+            $end_date = ($request->end_date) ? strtotime($request->end_date) : null;
+
             if (($user->hasRole('Super Admin') || $user->hasRole('Admin')) && $user->is_admin = 1)
             {
-
-                $date = ($request->date) ? strtotime($request->date) : null;
-                $start_date = ($request->start_date) ? strtotime($request->start_date) : null;
-                $end_date = ($request->end_date) ? strtotime($request->end_date) : null;
-
                 $expenseType = Expense::with('expenseType')
                 ->when($date, function($query) use ($date) {
                     $query->where('date',$date);
@@ -64,19 +63,17 @@ class ExpenseTypeController extends Controller
             }
             if ($user->hasRole('HR') && $user->is_admin = 1)
             {
-                $expenseType = Expense::with('expenseType')->where('user_id',$user->id)->get();
-                if ($request->date)
-                {
-                    $expenseType = Expense::with('expenseType')->where('user_id',$user->id)->whereDate('date',$request->date)->get();
-                }
-                if ($request->expense_type_id)
-                {
-                    $expenseType = Expense::with('expenseType')->where('user_id',$user->id)->where('expense_type_id',$request->expense_type_id)->get();
-                }
-                if($request->start_date && $request->end_date)
-                {
-                    $expenseType = Expense::with('expenseType')->where('user_id',$user->id)->whereBetween('date', [$request->start_date, $request->end_date])->get();
-                }
+                $expenseType = Expense::with('expenseType')
+                    ->when($date, function($query) use ($date) {
+                        $query->where('date',$date);
+                    })
+                    ->when($request->expense_type_id, function($query) use ($request) {
+                        $query->where('expense_type_id',$request->expense_type_id);
+                    })
+                    ->when($start_date && $end_date, function($query) use ($start_date, $end_date) {
+                        $query->whereBetween('date', [$start_date, $end_date]);
+                    })->where('user_id',$user->id)
+                    ->get();
             }
             // $expenseType = $expenseType->paginate(($request->limit) ? $request->limit : 10);
 
