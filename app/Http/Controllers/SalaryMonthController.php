@@ -28,11 +28,16 @@ class SalaryMonthController extends Controller
         }
     }
 
-    public function list()
+    public function active()
     {
         try {
             $salaryMonth = SalaryMonth::where('status', '1')->get();
-            return $this->sendResponse($salaryMonth, 200, ['Get List Successfully.'], true);
+            if($salaryMonth){
+                return $this->sendResponse($salaryMonth, 200, ['Get List Successfully.'], true);
+            }else{
+                return $this->sendResponse(null, 200, ['Sorry not salary month is active'], true);
+            }
+
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);

@@ -100,5 +100,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('installment', InstallmentController::class);
     Route::apiResource('wfh', WorkFromHomeController::class);
     Route::apiResource('salary-month', SalaryMonthController::class);
-    Route::get('salary-month-list', [SalaryMonthController::class,'list']);
+    Route::get('salary-month-active', [SalaryMonthController::class,'active']);
 });

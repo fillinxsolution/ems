@@ -151,12 +151,17 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $this->validate($request, [
-            'name'      => 'required',
-            'empleado_id' => 'required'
+            'name' => "required|unique:users,name,{$user->id}",
+            'email' => "required|unique:users,email,{$user->id}",
+            'empleado_id' => "required|unique:users,empleado_id,{$user->id}",
+            'salary' => "required"
         ]);
         try {
-            $user->update(['name' => $request->name, 'empleado_id' => $request->empleado_id]);
-            $user->assignRole($request->role);
+            $user->update(['name' => $request->name, 'email' => $request->email, 'empleado_id' => $request->empleado_id, 'salary' => $request->salary,
+            'cnic' => $request->cnic, 'mobile_no' => $request->mobile_no]);
+            if(isset($request->role)){
+                $user->assignRole($request->role);
+            }
             // $user->details()->update($request->details);
             return $this->sendResponse($user, 200, ['User Updated Successfully'], true);
         } catch (QueryException $e) {
