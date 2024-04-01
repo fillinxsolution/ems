@@ -253,7 +253,7 @@ class UserController extends Controller
     public function userExport()
     {
         $filePath = Excel::store(new UsersExport(), 'users.csv', 'public');
-        $fileUrl = asset('storage/public/users.csv');
+        $fileUrl = asset('storage/users.csv');
         return $fileUrl;
     }
 }
