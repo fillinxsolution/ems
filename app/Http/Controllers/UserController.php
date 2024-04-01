@@ -28,7 +28,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         try {
-            $users = User::with('roles')
+            $users = User::with(['roles','details'])
                 ->whereDoesntHave('roles', function($query) {
                     $query->where('name', 'Super Admin'); // Assuming the role name is stored in the 'name' column
                 })
@@ -64,7 +64,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         try {
-            $user->load('accounts');
+            $user->load(['accounts','details']);
             return $this->sendResponse($user, 200, ['User Details'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
