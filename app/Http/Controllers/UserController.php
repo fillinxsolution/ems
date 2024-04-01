@@ -134,6 +134,7 @@ class UserController extends Controller
                 $request->validate([
                     'details.gender' => 'required',
                     'details.joining_date' => 'required',
+                    'details.account_no' => 'required|unique:user_details,account_no',
                 ]);
                 $user->details()->create($request->details);
             }
@@ -161,6 +162,13 @@ class UserController extends Controller
             'cnic' => $request->cnic, 'mobile_no' => $request->mobile_no]);
             if(isset($request->role)){
                 $user->assignRole($request->role);
+            }
+//            dd($user->details()->user_id);
+            if ($request->is_admin == 0) {
+                $request->validate([
+                    'details.account_no' => 'required|unique:user_details,account_no,' .  $user->details->id,
+                ]);
+                $user->details()->update(['account_no'=>$request->details['account_no']]);
             }
             // $user->details()->update($request->details);
             return $this->sendResponse($user, 200, ['User Updated Successfully'], true);
@@ -244,6 +252,8 @@ class UserController extends Controller
 
     public function userExport()
     {
-        return Excel::download(new UsersExport(), 'users.xlsx');
+        $filePath = Excel::store(new UsersExport(), 'users.csv', 'public');
+        $fileUrl = asset('storage/public/users.csv');
+        return $fileUrl;
     }
 }

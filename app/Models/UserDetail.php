@@ -20,5 +20,6 @@ class UserDetail extends Model
         'joining_date',
         'current_address',
         'permanent_address',
+        'account_no',
     ];
 }
