@@ -259,8 +259,8 @@ class UserController extends Controller
     public function userExport()
     {
         try {
-            $filePath = Excel::store(new UsersExport(), 'users.csv', 'public');
-            $fileUrl = asset('storage/users.csv');
+            $filePath = Excel::store(new UsersExport(), 'users.xlsx', 'public');
+            $fileUrl = asset('storage/users.xlsx');
             return $this->sendResponse($fileUrl, 200, ['Csv Export successfully'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
@@ -271,8 +271,8 @@ class UserController extends Controller
     public function csvExport($id)
     {
         try {
-            $filePath = Excel::store(new CsvExport($id), 'attendance-details.csv', 'public');
-            $fileUrl = asset('storage/attendance-details.csv');
+            $filePath = Excel::store(new CsvExport($id), 'salary-details.xlsx', 'public');
+            $fileUrl = asset('storage/salary-details.xlsx');
             return $this->sendResponse($fileUrl, 200, ['Csv Export successfully'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
