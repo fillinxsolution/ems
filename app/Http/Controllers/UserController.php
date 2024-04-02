@@ -9,6 +9,7 @@ use App\Import\UserImport;
 use App\Models\ImportCsv;
 use App\Models\ImportCsvDetail;
 use App\Models\User;
+use App\Models\UserDetail;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -164,17 +165,17 @@ class UserController extends Controller
                 'name' => $request->name, 'email' => $request->email, 'empleado_id' => $request->empleado_id, 'salary' => $request->salary,
                 'cnic' => $request->cnic, 'mobile_no' => $request->mobile_no
             ]);
+            if ($request->is_admin == 0) {
+                $request->validate([
+                    'details.account_no' => 'required|unique:user_details,account_no,'.$user->details->id,
+                ]);
+                $user->details()->update(['account_no' => $request->details['account_no']]);
+
+            }
             if (isset($request->role)) {
                 $user->assignRole($request->role);
             }
-            //            dd($user->details()->user_id);
-            if ($request->is_admin == 0) {
-                $request->validate([
-                    'details.account_no' => 'required|unique:user_details,account_no,' .  $user->details->id,
-                ]);
-                $user->details()->update(['account_no' => $request->details['account_no']]);
-            }
-            // $user->details()->update($request->details);
+            $user->load('details');
             return $this->sendResponse($user, 200, ['User Updated Successfully'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
@@ -260,7 +261,7 @@ class UserController extends Controller
         try {
             $filePath = Excel::store(new UsersExport(), 'users.csv', 'public');
             $fileUrl = asset('storage/users.csv');
-            return $this->sendResponse($fileUrl, 200, ['Csv imported successfully'], true);
+            return $this->sendResponse($fileUrl, 200, ['Csv Export successfully'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
@@ -272,7 +273,7 @@ class UserController extends Controller
         try {
             $filePath = Excel::store(new CsvExport($id), 'attendance-details.csv', 'public');
             $fileUrl = asset('storage/attendance-details.csv');
-            return $this->sendResponse($fileUrl, 200, ['Csv imported successfully'], true);
+            return $this->sendResponse($fileUrl, 200, ['Csv Export successfully'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);

@@ -153,6 +153,10 @@ class PermissionsSeeder extends Seeder
             'qualifications-edit',
             'qualifications-delete',
 
+            'import-users',
+            'export-users',
+            'csv-export',
+
         ];
 
         foreach ($permissions as $permission) {
