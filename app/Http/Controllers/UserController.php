@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CsvExport;
 use App\Exports\UsersExport;
 use App\Import\Import;
 use App\Models\ImportCsv;
@@ -28,8 +29,8 @@ class UserController extends Controller
     public function index(Request $request)
     {
         try {
-            $users = User::with(['roles','details'])
-                ->whereDoesntHave('roles', function($query) {
+            $users = User::with(['roles', 'details'])
+                ->whereDoesntHave('roles', function ($query) {
                     $query->where('name', 'Super Admin'); // Assuming the role name is stored in the 'name' column
                 })
                 ->search($request->search ?? '')
@@ -48,7 +49,7 @@ class UserController extends Controller
     {
         try {
             $users = User::with('roles')
-                ->whereDoesntHave('roles', function($query) {
+                ->whereDoesntHave('roles', function ($query) {
                     $query->where('name', 'Super Admin'); // Assuming the role name is stored in the 'name' column
                 })->get();
             return $this->sendResponse($users, 200, ['Users List'], true);
@@ -64,7 +65,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         try {
-            $user->load(['accounts','details']);
+            $user->load(['accounts', 'details']);
             return $this->sendResponse($user, 200, ['User Details'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
@@ -126,7 +127,7 @@ class UserController extends Controller
             $request->validate([
                 'name'      => 'required',
                 'email'     => 'required|unique:users,email',
-//                'cnic'     => 'required|unique:users,cnic',
+                //                'cnic'     => 'required|unique:users,cnic',
                 'password'  => 'required|confirmed',
             ]);
             $user = User::create($request->all());
@@ -158,17 +159,19 @@ class UserController extends Controller
             'salary' => "required"
         ]);
         try {
-            $user->update(['name' => $request->name, 'email' => $request->email, 'empleado_id' => $request->empleado_id, 'salary' => $request->salary,
-            'cnic' => $request->cnic, 'mobile_no' => $request->mobile_no]);
-            if(isset($request->role)){
+            $user->update([
+                'name' => $request->name, 'email' => $request->email, 'empleado_id' => $request->empleado_id, 'salary' => $request->salary,
+                'cnic' => $request->cnic, 'mobile_no' => $request->mobile_no
+            ]);
+            if (isset($request->role)) {
                 $user->assignRole($request->role);
             }
-//            dd($user->details()->user_id);
+            //            dd($user->details()->user_id);
             if ($request->is_admin == 0) {
                 $request->validate([
                     'details.account_no' => 'required|unique:user_details,account_no,' .  $user->details->id,
                 ]);
-                $user->details()->update(['account_no'=>$request->details['account_no']]);
+                $user->details()->update(['account_no' => $request->details['account_no']]);
             }
             // $user->details()->update($request->details);
             return $this->sendResponse($user, 200, ['User Updated Successfully'], true);
@@ -196,8 +199,9 @@ class UserController extends Controller
         }
     }
 
-    public function import(Request $request)   {
-        try{
+    public function import(Request $request)
+    {
+        try {
             $request->validate([
                 'file' => 'required|mimes:xlsx,xls',
                 'month' => 'required|numeric|between:1,12',
@@ -206,10 +210,10 @@ class UserController extends Controller
             ]);
 
             $file = $request->file('file');
-            $name = $request->month .'-'. $request->year;
+            $name = $request->month . '-' . $request->year;
 
             $check_old_csv = ImportCsv::where('name', $name)->first();
-            if($check_old_csv){
+            if ($check_old_csv) {
                 return $this->sendResponse(null, 404, ['Sheet Already Exist for this month please remove it first.'], false);
             }
             $path = $file->storeAs('public', $name);
@@ -239,7 +243,7 @@ class UserController extends Controller
             $request->validate([
                 'user_id' => 'required',
             ]);
-            $importDetail = ImportCsvDetail::with(['user','salaryMonth'])->where('user_id',$request->user_id)->orderBy('salary_month_id', 'desc')->get();
+            $importDetail = ImportCsvDetail::with(['user', 'salaryMonth'])->where('user_id', $request->user_id)->orderBy('salary_month_id', 'desc')->get();
             return $this->sendResponse($importDetail, 200, ['Users List'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
@@ -252,8 +256,25 @@ class UserController extends Controller
 
     public function userExport()
     {
-        $filePath = Excel::store(new UsersExport(), 'users.csv', 'public');
-        $fileUrl = asset('storage/users.csv');
-        return $fileUrl;
+        try {
+            $filePath = Excel::store(new UsersExport(), 'users.csv', 'public');
+            $fileUrl = asset('storage/users.csv');
+            return $this->sendResponse($fileUrl, 200, ['Csv imported successfully'], true);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
+
+    public function csvExport($id)
+    {
+        try {
+            $filePath = Excel::store(new CsvExport($id), 'attendance-details.csv', 'public');
+            $fileUrl = asset('storage/attendance-details.csv');
+            return $this->sendResponse($fileUrl, 200, ['Csv imported successfully'], true);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
     }
 }
