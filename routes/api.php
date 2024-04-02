@@ -58,6 +58,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('user/transections', [UserController::class, 'transections']);
     Route::get('user/export', [UserController::class, 'userExport']);
     Route::get('user/csv-export/{id}', [UserController::class, 'csvExport']);
+    Route::post('user/import', [UserController::class, 'importUser']);
     Route::get('fund_transfer/create', [FundTransferController::class, 'create']);
     Route::post('/import', [UserController::class, 'import']);
 

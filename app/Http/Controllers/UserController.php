@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\CsvExport;
 use App\Exports\UsersExport;
 use App\Import\Import;
+use App\Import\UserImport;
 use App\Models\ImportCsv;
 use App\Models\ImportCsvDetail;
 use App\Models\User;
@@ -272,6 +273,27 @@ class UserController extends Controller
             $filePath = Excel::store(new CsvExport($id), 'attendance-details.csv', 'public');
             $fileUrl = asset('storage/attendance-details.csv');
             return $this->sendResponse($fileUrl, 200, ['Csv imported successfully'], true);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
+
+
+    public function importUser(Request $request)   {
+        try{
+            $request->validate([
+                'file' => 'required|mimes:xlsx,xls',
+            ]);
+            $file = $request->file('file');
+
+            // Process the Excel file
+            Excel::import(new UserImport(), $file);
+
+            return $this->sendResponse(null, 200, ['Excel file imported successfully!'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
