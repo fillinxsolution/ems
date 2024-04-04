@@ -137,7 +137,7 @@ class UserController extends Controller
                 $request->validate([
                     'details.gender' => 'required',
                     'details.joining_date' => 'required',
-                    'details.account_no' => 'required|unique:user_details,account_no',
+//                    'details.account_no' => 'required|unique:user_details,account_no',
                 ]);
                 $user->details()->create($request->details);
             }
@@ -166,9 +166,9 @@ class UserController extends Controller
                 'cnic' => $request->cnic, 'mobile_no' => $request->mobile_no
             ]);
             if ($request->is_admin == 0) {
-                $request->validate([
-                    'details.account_no' => 'required|unique:user_details,account_no,'.$user->details->id,
-                ]);
+//                $request->validate([
+//                    'details.account_no' => 'required|unique:user_details,account_no,'.$user->details->id,
+//                ]);
                 $user->details()->update(['account_no' => $request->details['account_no']]);
 
             }
