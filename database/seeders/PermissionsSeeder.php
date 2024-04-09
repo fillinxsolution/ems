@@ -157,6 +157,9 @@ class PermissionsSeeder extends Seeder
             'export-users',
             'csv-export',
 
+            'loan-list',
+            'installment'
+
         ];
 
         foreach ($permissions as $permission) {
