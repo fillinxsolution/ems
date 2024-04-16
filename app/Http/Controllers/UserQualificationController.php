@@ -2,25 +2,32 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\UserQualification;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class UserQualificationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $request->validate([
+            'user_id' => 'required',
+        ]);
+        try {
+            $qualifications = UserQualification::where('user_id',$request->user_id)->get();
+            return $this->sendResponse($qualifications, 200, ['Get List Successfully.'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
     }
 
     /**
@@ -28,7 +35,34 @@ class UserQualificationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        try {
+            $this->validate($request, [
+                'user_id' => 'required',
+            ]);
+            foreach ($request->userQualification as  $qualifi) {
+                $qualification = new UserQualification();
+                $qualification->user_id = $request->user_id;
+                $qualification->qualification_id = $qualifi['qualification_id'];
+                $qualification->title = $qualifi['title'];
+                $qualification->institute = $qualifi['institute'];
+                $qualification->from = $qualifi['from'];
+                $qualification->to = $qualifi['to'];
+                $qualification->obtained_marks = $qualifi['obtained_marks'];
+                $qualification->total_marks = $qualifi['total_marks'];
+                $qualification->remarks = $qualifi['remarks'];
+                $qualification->save();
+            }
+
+            return $this->sendResponse($qualification, 200, ['Stored Successfully.'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+
     }
 
     /**
@@ -52,7 +86,33 @@ class UserQualificationController extends Controller
      */
     public function update(Request $request, UserQualification $userQualification)
     {
-        //
+        $userqualifications = UserQualification::where('user_id',$request->user_id)->delete();
+        try {
+            $this->validate($request, [
+                'user_id' => 'required',
+            ]);
+            foreach ($request->userQualification as  $qualifi) {
+                $qualification = new UserQualification();
+                $qualification->user_id = $request->user_id;
+                $qualification->qualification_id = $qualifi['qualification_id'];
+                $qualification->title = $qualifi['title'];
+                $qualification->institute = $qualifi['institute'];
+                $qualification->from = $qualifi['from'];
+                $qualification->to = $qualifi['to'];
+                $qualification->obtained_marks = $qualifi['obtained_marks'];
+                $qualification->total_marks = $qualifi['total_marks'];
+                $qualification->remarks = $qualifi['remarks'];
+                $qualification->save();
+            }
+
+            return $this->sendResponse($qualification, 200, ['Updated Successfully.'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
     }
 
     /**

@@ -6,11 +6,15 @@ use App\Http\Controllers\BankController;
 use App\Http\Controllers\CafeController;
 use App\Http\Controllers\CafeExpenseController;
 use App\Http\Controllers\SalaryMonthController;
+use App\Http\Controllers\UserQualificationController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ExpenseTypeController;
+use App\Http\Controllers\UserExperienceController;
 use App\Http\Controllers\FineController;
+use App\Http\Controllers\UserCertificationController;
 use App\Http\Controllers\FundTransferController;
 use App\Http\Controllers\ImportCsvController;
 use App\Http\Controllers\InstallmentController;
@@ -42,6 +46,9 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
+// forgot password
+Route::post('forgotPassword', [ForgotPasswordController::class, 'create']);
+Route::post('resetPassword', [ForgotPasswordController::class, 'update'])->name('password.reset');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
@@ -103,4 +110,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('wfh', WorkFromHomeController::class);
     Route::apiResource('salary-month', SalaryMonthController::class);
     Route::get('salary-month-active', [SalaryMonthController::class,'active']);
+
+    Route::apiResource('user_qualification', UserQualificationController::class);
+    Route::apiResource('user_certification', UserCertificationController::class);
+    Route::apiResource('user_experience', UserExperienceController::class);
 });
