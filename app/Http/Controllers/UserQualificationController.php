@@ -43,7 +43,7 @@ class UserQualificationController extends Controller
             $userqualifications = UserQualification::where('user_id',$request->user_id)->get();
             if (count($userqualifications) > 0)
             {
-                $userqualifications->delete();
+               UserQualification::where('user_id',$request->user_id)->delete();
             }
             foreach ($request->userQualification as  $qualifi) {
                 $qualification = new UserQualification();
@@ -91,7 +91,7 @@ class UserQualificationController extends Controller
      */
     public function update(Request $request, UserQualification $userQualification)
     {
-      
+
     }
 
     /**

@@ -44,7 +44,7 @@ class UserExperienceController extends Controller
             $userExperiences = UserExperience::where('user_id',$request->user_id)->get();
             if (count($userExperiences) > 0)
             {
-                $userExperiences->delete();
+                UserExperience::where('user_id',$request->user_id)->delete();
             }
             foreach ($request->userExperience as  $experience) {
                 $certif = new UserExperience();

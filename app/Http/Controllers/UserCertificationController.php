@@ -41,7 +41,7 @@ class UserCertificationController extends Controller
             $userCertifications = UserCertification::where('user_id',$request->user_id)->get();
             if (count($userCertifications) > 0)
             {
-                $userCertifications->delete();
+                UserCertification::where('user_id',$request->user_id)->delete();
             }
             foreach ($request->userCertification as  $certification) {
                 $certif = new UserCertification();
