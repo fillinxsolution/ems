@@ -14,4 +14,8 @@ class Qualification extends Model
         'description',
         'status',
     ];
+
+    public function user_qualification(){
+        return $this->hasMany(UserQualification::class, 'qualification_id');
+    }
 }

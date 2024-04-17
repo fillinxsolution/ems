@@ -19,7 +19,7 @@ class UserQualificationController extends Controller
             'user_id' => 'required',
         ]);
         try {
-            $qualifications = UserQualification::where('user_id',$request->user_id)->get();
+            $qualifications = UserQualification::with('qualification')->where('user_id',$request->user_id)->get();
             return $this->sendResponse($qualifications, 200, ['Get List Successfully.'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());

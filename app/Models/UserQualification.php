@@ -20,4 +20,9 @@ class UserQualification extends Model
         'total_marks',
         'remarks',
     ];
+
+    public function qualification(){
+        return $this->belongsTo(UserQualification::class, 'qualification_id');
+    }
+
 }
