@@ -22,7 +22,7 @@ class UserQualification extends Model
     ];
 
     public function qualification(){
-        return $this->belongsTo(UserQualification::class, 'qualification_id');
+        return $this->belongsTo(Qualification::class, 'qualification_id');
     }
 
 }
