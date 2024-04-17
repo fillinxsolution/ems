@@ -38,6 +38,11 @@ class UserCertificationController extends Controller
             $this->validate($request, [
                 'user_id' => 'required',
             ]);
+            $userCertifications = UserCertification::where('user_id',$request->user_id)->get();
+            if (count($userCertifications) > 0)
+            {
+                $userCertifications->delete();
+            }
             foreach ($request->userCertification as  $certification) {
                 $certif = new UserCertification();
                 $certif->user_id = $request->user_id;
@@ -78,28 +83,7 @@ class UserCertificationController extends Controller
      */
     public function update(Request $request, UserCertification $userCertification)
     {
-        $userCertifications = UserCertification::where('user_id',$request->user_id)->delete();
-        try {
-            $this->validate($request, [
-                'user_id' => 'required',
-            ]);
-            foreach ($request->userCertification as  $certification) {
-                $certif = new UserCertification();
-                $certif->user_id = $request->user_id;
-                $certif->title = $certification['title'];
-                $certif->institute = $certification['institute'];
-                $certif->certificated_at = $certification['certificated_at'];
-                $certif->details = $certification['details'];
-                $certif->save();
-            }
-            return $this->sendResponse($certif, 200, ['Stored Successfully.'], true);
-        } catch (QueryException $e) {
-            Log::error('Database error: ' . $e->getMessage());
-            return $this->sendResponse(null, 500, [$e->getMessage()], false);
-        } catch (\Exception $e) {
-            Log::error('Error: ' . $e->getMessage());
-            return $this->sendResponse(null, 500, [$e->getMessage()], false);
-        }
+
     }
 
     /**
