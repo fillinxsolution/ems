@@ -38,11 +38,8 @@ class UserCertificationController extends Controller
             $this->validate($request, [
                 'user_id' => 'required',
             ]);
-            $userCertifications = UserCertification::where('user_id',$request->user_id)->get();
-            if (count($userCertifications) > 0)
-            {
-                $userCertifications->delete();
-            }
+            $userCertifications = UserCertification::where('user_id',$request->user_id)->delete();
+
             foreach ($request->userCertification as  $certification) {
                 $certif = new UserCertification();
                 $certif->user_id = $request->user_id;
