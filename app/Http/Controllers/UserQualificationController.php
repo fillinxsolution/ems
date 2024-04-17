@@ -40,11 +40,7 @@ class UserQualificationController extends Controller
             $this->validate($request, [
                 'user_id' => 'required',
             ]);
-            $userqualifications = UserQualification::where('user_id',$request->user_id)->get();
-            if (count($userqualifications) > 0)
-            {
-               UserQualification::where('user_id',$request->user_id)->delete();
-            }
+            $userqualifications = UserQualification::where('user_id',$request->user_id)->delete();
             foreach ($request->userQualification as  $qualifi) {
                 $qualification = new UserQualification();
                 $qualification->user_id = $request->user_id;
