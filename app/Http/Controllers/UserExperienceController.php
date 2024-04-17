@@ -40,6 +40,12 @@ class UserExperienceController extends Controller
             $this->validate($request, [
                 'user_id' => 'required',
             ]);
+
+            $userExperiences = UserExperience::where('user_id',$request->user_id)->get();
+            if (count($userExperiences) > 0)
+            {
+                $userExperiences->delete();
+            }
             foreach ($request->userExperience as  $experience) {
                 $certif = new UserExperience();
                 $certif->user_id = $request->user_id;
@@ -83,31 +89,31 @@ class UserExperienceController extends Controller
      */
     public function update(Request $request, UserExperience $userExperience)
     {
-        $userExperiences = UserExperience::where('user_id',$request->user_id)->delete();
-        try {
-            $this->validate($request, [
-                'user_id' => 'required',
-            ]);
-            foreach ($request->userExperience as  $experience) {
-                $certif = new UserExperience();
-                $certif->user_id = $request->user_id;
-                $certif->title = $experience['title'];
-                $certif->institute = $experience['institute'];
-                $certif->designation = $experience['designation'];
-                $certif->from = $experience['from'];
-                $certif->to = $experience['to'];
-                $certif->leaving_reason = $experience['leaving_reason'];
-                $certif->remarks = $experience['remarks'];
-                $certif->save();
-            }
-            return $this->sendResponse($certif, 200, ['Stored Successfully.'], true);
-        } catch (QueryException $e) {
-            Log::error('Database error: ' . $e->getMessage());
-            return $this->sendResponse(null, 500, [$e->getMessage()], false);
-        } catch (\Exception $e) {
-            Log::error('Error: ' . $e->getMessage());
-            return $this->sendResponse(null, 500, [$e->getMessage()], false);
-        }
+//        $userExperiences = UserExperience::where('user_id',$request->user_id)->delete();
+//        try {
+//            $this->validate($request, [
+//                'user_id' => 'required',
+//            ]);
+//            foreach ($request->userExperience as  $experience) {
+//                $certif = new UserExperience();
+//                $certif->user_id = $request->user_id;
+//                $certif->title = $experience['title'];
+//                $certif->institute = $experience['institute'];
+//                $certif->designation = $experience['designation'];
+//                $certif->from = $experience['from'];
+//                $certif->to = $experience['to'];
+//                $certif->leaving_reason = $experience['leaving_reason'];
+//                $certif->remarks = $experience['remarks'];
+//                $certif->save();
+//            }
+//            return $this->sendResponse($certif, 200, ['Stored Successfully.'], true);
+//        } catch (QueryException $e) {
+//            Log::error('Database error: ' . $e->getMessage());
+//            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+//        } catch (\Exception $e) {
+//            Log::error('Error: ' . $e->getMessage());
+//            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+//        }
     }
 
     /**
