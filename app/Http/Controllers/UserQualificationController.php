@@ -40,6 +40,11 @@ class UserQualificationController extends Controller
             $this->validate($request, [
                 'user_id' => 'required',
             ]);
+            $userqualifications = UserQualification::where('user_id',$request->user_id)->get();
+            if (count($userqualifications) > 0)
+            {
+                $userqualifications->delete();
+            }
             foreach ($request->userQualification as  $qualifi) {
                 $qualification = new UserQualification();
                 $qualification->user_id = $request->user_id;
@@ -86,33 +91,7 @@ class UserQualificationController extends Controller
      */
     public function update(Request $request, UserQualification $userQualification)
     {
-        $userqualifications = UserQualification::where('user_id',$request->user_id)->delete();
-        try {
-            $this->validate($request, [
-                'user_id' => 'required',
-            ]);
-            foreach ($request->userQualification as  $qualifi) {
-                $qualification = new UserQualification();
-                $qualification->user_id = $request->user_id;
-                $qualification->qualification_id = $qualifi['qualification_id'];
-                $qualification->title = $qualifi['title'];
-                $qualification->institute = $qualifi['institute'];
-                $qualification->from = $qualifi['from'];
-                $qualification->to = $qualifi['to'];
-                $qualification->obtained_marks = $qualifi['obtained_marks'];
-                $qualification->total_marks = $qualifi['total_marks'];
-                $qualification->remarks = $qualifi['remarks'];
-                $qualification->save();
-            }
-
-            return $this->sendResponse($qualification, 200, ['Updated Successfully.'], true);
-        } catch (QueryException $e) {
-            Log::error('Database error: ' . $e->getMessage());
-            return $this->sendResponse(null, 500, [$e->getMessage()], false);
-        } catch (\Exception $e) {
-            Log::error('Error: ' . $e->getMessage());
-            return $this->sendResponse(null, 500, [$e->getMessage()], false);
-        }
+      
     }
 
     /**
