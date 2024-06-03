@@ -4,6 +4,7 @@ namespace App\Import;
 use App\Models\ImportCsvDetail;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Illuminate\Support\Str;
 
@@ -17,11 +18,10 @@ class Import implements ToCollection {
     public function collection(Collection $rows) {
         $data = [];
         foreach ($rows as $index => $row) {
-
-
-            if($row[0] == 'For the month 1/2024'){
+            if($row[0] == $rows[2][0]){
                 $record['employee'] = $rows[$index + 1]->filter()->toArray();
             }
+            Log::info('data'.$rows[2]);
             if($row[0] == 'Total Days'){
                 $record['days']     = $row->filter()->toArray();
                 $record['expected'] = $rows[$index + 1]->filter()->toArray();
@@ -29,8 +29,8 @@ class Import implements ToCollection {
             }
         }
 
-        foreach($data as $new_row ) {
 
+        foreach($data as $new_row ) {
 
             $empolye = explode(" ", $new_row['employee'][0]);
             $emp_id = end($empolye);
