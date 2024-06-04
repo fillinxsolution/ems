@@ -6,10 +6,15 @@ use App\Exports\CsvExport;
 use App\Exports\UsersExport;
 use App\Import\Import;
 use App\Import\UserImport;
+use App\Jobs\CreateSalaryJob;
+use App\Models\CafeExpense;
+use App\Models\Fine;
 use App\Models\ImportCsv;
 use App\Models\ImportCsvDetail;
 use App\Models\User;
+use App\Models\UserBonus;
 use App\Models\UserDetail;
+use App\Models\WorkFromHome;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -129,7 +134,7 @@ class UserController extends Controller
             $request->validate([
                 'name'      => 'required',
                 'email'     => 'required|unique:users,email',
-                //                'cnic'     => 'required|unique:users,cnic',
+                'cnic'     => 'required|unique:users,cnic',
                 'password'  => 'required|confirmed',
             ]);
             $user = User::create($request->all());
@@ -229,6 +234,22 @@ class UserController extends Controller
             // Process the Excel file
             Excel::import(new Import($import_csv), $file);
 
+            $importCsvDetail = ImportCsvDetail::where('salary_month_id', $request->salary_month_id)->get();
+            foreach ($importCsvDetail as $data){
+                $cafeExpense = CafeExpense::where('salary_month_id',$request->salary_month_id)->where('user_id',$data->user_id)->sum('amount');
+                $userBonus = UserBonus::where('salary_month_id',$request->salary_month_id)->where('user_id',$data->user_id)->sum('amount');
+                $wfh = WorkFromHome::where('salary_month_id',$request->salary_month_id)->where('user_id',$data->user_id)->sum('minutes');
+                $fine = Fine::where('salary_month_id',$request->salary_month_id)->where('user_id',$data->user_id)->sum('amount');
+                $importCsvDetailSave = ImportCsvDetail::where('salary_month_id', $request->salary_month_id)->where('user_id', $data->user_id)->first();
+                if($importCsvDetailSave){
+                    $importCsvDetailSave->cafe_deduction = $cafeExpense;
+                    $importCsvDetailSave->bonus = $userBonus;
+                    $importCsvDetailSave->wfh = $wfh;
+                    $importCsvDetailSave->fine_deduction = $fine;
+                    $importCsvDetailSave->save();
+                }
+            }
+
             return $this->sendResponse(null, 200, ['Excel file imported successfully!'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
@@ -295,6 +316,27 @@ class UserController extends Controller
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
+
+    public function userConnected(Request $request){
+        try{
+            $request->validate([
+                'empleado_id' => 'required',
+            ]);
+            $user = User::where('empleado_id',$request->empleado_id)->first();
+            if ($user){
+                $importCSVDetail = ImportCsvDetail::where('empleado_id',$request->empleado_id)->first();
+                $importCSVDetail->user_id = $user->id;
+                $importCSVDetail->save();
+                dispatch(new CreateSalaryJob($importCSVDetail->import_csvs_id));
+                return $this->sendResponse(null, 200, ['User connected successfully!'], true);
+            }else{
+                return $this->sendResponse(null, 500, ['User Not Exist Against This Empleado ID!'], false);
+            }
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);

@@ -62,6 +62,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('user/accounts', [UserController::class, 'accounts']);
     Route::get('user/expenses', [UserController::class, 'expenses']);
     Route::get('user/salary-detail', [UserController::class, 'salaryDetail']);
+    Route::post('user/connected', [UserController::class, 'userConnected']);
     Route::get('user/transections', [UserController::class, 'transections']);
     Route::get('user/export', [UserController::class, 'userExport']);
     Route::get('user/csv-export/{id}', [UserController::class, 'csvExport']);
