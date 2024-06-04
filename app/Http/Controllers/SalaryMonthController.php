@@ -126,12 +126,12 @@ class SalaryMonthController extends Controller
                 $salaryMonth->delete();
                 return $this->sendResponse(null, 200, ['Record deleted successfully.'], true);
             }else{
-                return $this->sendResponse(null, 200, ['Salary month is not an active salary month.'], true);
+                return $this->sendResponse(null, 500, ['Salary month is not an active salary month.'], false);
             }
 
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
-            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+            return $this->sendResponse(null, 500, ['error'=> $e->getMessage(),'message'=> 'Delete Associated Data First'], false);
         }
     }
 }
