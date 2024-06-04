@@ -131,9 +131,7 @@ class SalaryMonthController extends Controller
 
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
-            $error =  $e->getMessage();
-            $message = 'Delete Associated Data First';
-            return $this->sendResponse(null, 500, ['error'=> $error,'message'=> $message], false);
+            return $this->sendResponse(null, 500, ['error'=> $e->getMessage(),'message'=> 'Delete Associated Data First'], false);
         }
     }
 }
