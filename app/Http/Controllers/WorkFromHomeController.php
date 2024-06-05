@@ -114,7 +114,17 @@ class WorkFromHomeController extends Controller
     public function destroy(WorkFromHome $wfh)
     {
         try {
+
+            $salary_month_id = $wfh->salary_month_id;
+            $user_id = $wfh->user_id;
             $wfh->delete();
+            $wf = WorkFromHome::where('salary_month_id',$salary_month_id)->where('user_id',$user_id)->sum('minutes');
+            $importCsvDetail = ImportCsvDetail::where('salary_month_id', $salary_month_id)->where('user_id', $user_id)->first();
+            if($importCsvDetail) {
+                $importCsvDetail->wfh = $wf;
+                $importCsvDetail->save();
+            }
+
             return $this->sendResponse(null, 200, ['Record deleted successfully.'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());

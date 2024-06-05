@@ -129,7 +129,16 @@ class UserBonusController extends Controller
     public function destroy(UserBonus $userBonus)
     {
         try {
+            $salary_month_id = $userBonus->salary_month_id;
+            $user_id = $userBonus->user_id;
             $userBonus->delete();
+            $userBonuses = UserBonus::where('salary_month_id',$salary_month_id)->where('user_id',$user_id)->sum('amount');
+            $importCsvDetail = ImportCsvDetail::where('salary_month_id', $salary_month_id)->where('user_id', $user_id)->first();
+            if($importCsvDetail) {
+                $importCsvDetail->bonus = $userBonuses;
+                $importCsvDetail->save();
+            }
+
             return $this->sendResponse(null, 200, ['Record deleted successfully.'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
