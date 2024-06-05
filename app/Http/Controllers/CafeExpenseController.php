@@ -119,7 +119,15 @@ class CafeExpenseController extends Controller
     public function destroy(CafeExpense $cafeExpense)
     {
         try {
+            $salary_month_id = $cafeExpense->salary_month_id;
+            $user_id = $cafeExpense->user_id;
             $cafeExpense->delete();
+            $cafeExpenses = CafeExpense::where('salary_month_id',$salary_month_id)->where('user_id',$user_id)->sum('amount');
+            $importCsvDetail = ImportCsvDetail::where('salary_month_id', $salary_month_id)->where('user_id', $user_id)->first();
+            if($importCsvDetail) {
+                $importCsvDetail->cafe_deduction = $cafeExpenses;
+                $importCsvDetail->save();
+            }
             return $this->sendResponse(null, 200, ['Record deleted successfully.'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());

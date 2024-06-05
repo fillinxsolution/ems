@@ -122,7 +122,15 @@ class FineController extends Controller
     public function destroy(Fine $fine)
     {
         try {
+            $salary_month_id = $fine->salary_month_id;
+            $user_id = $fine->user_id;
             $fine->delete();
+            $fines = Fine::where('salary_month_id',$salary_month_id)->where('user_id',$user_id)->sum('amount');
+            $importCsvDetail = ImportCsvDetail::where('salary_month_id', $salary_month_id)->where('user_id', $user_id)->first();
+            if($importCsvDetail) {
+                $importCsvDetail->fine_deduction = $fines;
+                $importCsvDetail->save();
+            }
             return $this->sendResponse(null, 200, ['Record deleted successfully.'], true);
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
