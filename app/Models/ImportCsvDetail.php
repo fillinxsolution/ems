@@ -34,6 +34,7 @@ class ImportCsvDetail extends Model
         'salary_month_id',
         'name',
         'empleado_id',
+        'over_time_salary'
     ];
 
 

@@ -43,8 +43,13 @@ class CreateSalaryJob implements ShouldQueue
 
                 $earned_hours_in_min = round($total_earned_hours * 60, 2);
 
-
                 $total_earned_minuts = $earned_hours_in_min + $earned_min;
+
+                $over_time_hours_in_min = round( $import->overtime_hrs * 60, 2);
+                $total_overtime_earned_minuts = $over_time_hours_in_min + $import->overtime_min;
+
+                $overTime_salary = round($per_min_salary * $total_overtime_earned_minuts, 2);
+
 
                 $wfh = ($import->wfh) ? round($per_min_salary * $import->wfh, 2) : 0;
                 $loan_deduction = ($import->loan_deduction) ? $import->loan_deduction : 0;
@@ -56,7 +61,8 @@ class CreateSalaryJob implements ShouldQueue
                 $import->update([
                     'earned_time_in_min' => $total_earned_minuts,
                     'salary_in_min' => $per_min_salary,
-                    'month_salary' => $t_salary
+                    'month_salary' => $t_salary,
+                    'over_time_salary' =>  $overTime_salary
                 ]);
 
             }

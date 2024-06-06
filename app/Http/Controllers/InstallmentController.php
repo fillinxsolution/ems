@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ImportCsv;
+use App\Models\UserLoan;
 use App\Models\ImportCsvDetail;
 use App\Models\Installment;
 use Illuminate\Http\Request;
@@ -46,9 +46,18 @@ class InstallmentController extends Controller
                 'status',
                 'salary_month_id',
             ]));
+
+            $paidInstallment = Installment::where('user_loan_id',$request->user_loan_id)->sum('amount');
+            $loan = UserLoan::where('id',$request->user_loan_id)->first();
+            if ($paidInstallment != $loan->amount){
+                $remainingAmount =  (float) $loan->amount - (float) $paidInstallment;
+                $loan->remaining_amount = $remainingAmount;
+                $loan->paid_amount = $paidInstallment;
+                $loan->save();
+            }
             $importCsvDetail = ImportCsvDetail::where('salary_month_id', $request->salary_month_id)->where('user_id', $request->user_id)->first();
             if ($importCsvDetail) {
-                $this->csvUpdate($request->salary_month_id, $request->user_id, $importCsvDetail);
+                $this->csvUpdate($request->salary_month_id, $request->user_loan_id ,$request->user_id, $importCsvDetail);
             }
 
             return $this->sendResponse($installment, 200, ['Stored Successfully.'], true);
@@ -90,9 +99,19 @@ class InstallmentController extends Controller
                 'status',
                 'salary_month_id',
             ]));
+            $paidInstallment = Installment::where('user_loan_id',$request->user_loan_id)->sum('amount');
+            $loan = UserLoan::where('id',$request->user_loan_id)->first();
+            if ($loan){
+                $remainingAmount =  (float) $loan->amount - (float) $paidInstallment;
+                if ($paidInstallment != $loan->amount){
+                    $loan->remaining_amount = $remainingAmount;
+                    $loan->paid_amount = $paidInstallment;
+                    $loan->save();
+                }
+            }
             $importCsvDetail = ImportCsvDetail::where('salary_month_id', $request->salary_month_id)->where('user_id', $request->user_id)->first();
             if ($importCsvDetail) {
-                $this->csvUpdate($request->salary_month_id, $request->user_id, $importCsvDetail);
+                $this->csvUpdate($request->salary_month_id, $request->user_loan_id, $request->user_id, $importCsvDetail);
             }
 
             return $this->sendResponse($installment, 200, ['Updated successfully.'], true);
@@ -116,9 +135,9 @@ class InstallmentController extends Controller
         }
     }
 
-    public function csvUpdate($salary_month_id, $user_id, $importCsvDetail)
+    public function csvUpdate($salary_month_id,$user_loan_id, $user_id, $importCsvDetail)
     {
-        $instalment = Installment::where('salary_month_id', $salary_month_id)->where('user_id', $user_id)->sum('amount');
+        $instalment = Installment::where('salary_month_id', $salary_month_id)->where('user_loan_id', $user_loan_id)->sum('amount');
         if ($importCsvDetail) {
             $importCsvDetail->loan_deduction = $instalment;
             $importCsvDetail->save();
