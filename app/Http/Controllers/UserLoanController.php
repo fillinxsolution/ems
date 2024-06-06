@@ -56,12 +56,17 @@ class UserLoanController extends Controller
 
             $userLoan = UserLoan::create($request->only([
                 'amount',
+                'purpose',
                 'installments',
                 'transferred_at',
                 'status',
                 'user_id',
             ]));
-
+            if (count($userLoan->installment) == 0){
+                $userLoan->remaining_amount = $userLoan->amount;
+                $userLoan->paid_amount = 0;
+                $userLoan->save();
+            }
             return $this->sendResponse($userLoan, 200, ['Stored Successfully.'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
@@ -104,11 +109,15 @@ class UserLoanController extends Controller
             $userLoan->update($request->only([
                 'amount',
                 'installments',
+                'purpose',
                 'transferred_at',
                 'status',
                 'user_id',
             ]));
-
+           if (count($userLoan->installment) == 0){
+               $userLoan->remaining_amount = $userLoan->amount;
+               $userLoan->save();
+           }
             return $this->sendResponse($userLoan, 200, ['Updated successfully.'], true);
         } catch (QueryException $e) {
             Log::error('Database error: ' . $e->getMessage());
