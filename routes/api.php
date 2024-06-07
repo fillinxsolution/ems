@@ -26,10 +26,10 @@ use App\Http\Controllers\UserBonusController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserLoanController;
 use App\Http\Controllers\WorkFromHomeController;
-use App\Models\ImportCsv;
-use App\Models\User;
+use App\Http\Controllers\LeaveTypeController;
+use App\Http\Controllers\LeaveManagementController;
+use App\Http\Controllers\LeaveApplicationController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -69,6 +69,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('user/import', [UserController::class, 'importUser']);
     Route::get('fund_transfer/create', [FundTransferController::class, 'create']);
     Route::post('/import', [UserController::class, 'import']);
+    Route::get('/employee-wishes', [UserController::class, 'employeeWishes']);
 
     Route::resource('expense',      ExpenseController::class);
     Route::resource('role',         RoleController::class);
@@ -115,4 +116,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('user_qualification', UserQualificationController::class);
     Route::apiResource('user_certification', UserCertificationController::class);
     Route::apiResource('user_experience', UserExperienceController::class);
+
+
+    Route::resource('leave-type', LeaveTypeController::class);
+    Route::get('leave-type-list', [LeaveTypeController::class,'list']);
+
+    Route::resource('leave-management', LeaveManagementController::class);
+    Route::resource('leave-application', LeaveApplicationController::class);
+
+
 });

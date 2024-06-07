@@ -5,26 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserDetail extends Model
+class LeaveApplication extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
-        'father_name',
-        'gender',
-        'martial_status',
-        'birth_date',
-        'blood_group',
-        'phone_no',
-        'joining_date',
-        'current_address',
-        'permanent_address',
-        'account_no',
+        'leave_type_id', 'from', 'to', 'reason', 'numbers_of_days', 'status'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function leaveType()
+    {
+        return $this->belongsTo(LeaveType::class, 'leave_type_id');
     }
 }
