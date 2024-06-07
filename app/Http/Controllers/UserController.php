@@ -13,6 +13,7 @@ use App\Models\ImportCsv;
 use App\Models\ImportCsvDetail;
 use App\Models\User;
 use App\Models\UserBonus;
+use App\Models\UserDetail;
 use App\Models\WorkFromHome;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -339,5 +340,24 @@ class UserController extends Controller
             Log::error('Error: ' . $e->getMessage());
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
         }
+    }
+
+
+    public function employeeWishes()
+    {
+        try{
+            $today = now()->format('m-d');
+            $employees_birthday = UserDetail::with(['user'])->whereRaw('DATE_FORMAT(birth_date, "%m-%d") = ?', [$today])->get();
+            $employees_anniversy = UserDetail::with(['user'])->whereRaw('DATE_FORMAT(joining_date, "%m-%d") = ?', [$today])->get();
+            $result =[
+                'employees_birthday' => $employees_birthday,
+                'employees_anniversy' => $employees_anniversy
+            ];
+            return $this->sendResponse($result, 200, ['Data Get successfully!'], true);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+
     }
 }
