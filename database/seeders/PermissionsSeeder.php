@@ -158,7 +158,18 @@ class PermissionsSeeder extends Seeder
             'csv-export',
 
             'loan-list',
-            'installment'
+            'installment',
+
+            'leave-management-list',
+            'leave-management-create',
+            'leave-management-edit',
+            'leave-management-delete',
+
+            'leave-type-list',
+            'leave-type-create',
+            'leave-type-edit',
+            'leave-type-delete'
+
 
         ];
 
