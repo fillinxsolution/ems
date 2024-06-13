@@ -50,6 +50,8 @@ class LeaveApplicationController extends Controller
             $daysCount = $to->diffInDays($from);
             $data['numbers_of_days'] = $daysCount;
             $data['status'] = $request->status;
+            $data['from'] = $from->format('Y-m-d');
+            $data['to'] = $to->format('Y-m-d');
             $leaveType = LeaveApplication::create($data);
 
             return $this->sendResponse($leaveType, 200, ['Stored Successfully.'], true);
