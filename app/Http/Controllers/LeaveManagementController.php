@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Log;
 
 class LeaveManagementController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:leave-management-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:leave-management-create', ['only' => ['store']]);
+        $this->middleware('permission:leave-management-edit', ['only' => ['update']]);
+        $this->middleware('permission:leave-management-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      */

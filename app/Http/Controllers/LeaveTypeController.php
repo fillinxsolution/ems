@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Log;
 
 class LeaveTypeController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:leave-type-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:leave-type-create', ['only' => ['store']]);
+        $this->middleware('permission:leave-type-edit', ['only' => ['update']]);
+        $this->middleware('permission:leave-type-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      */
