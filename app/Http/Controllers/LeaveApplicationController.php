@@ -144,4 +144,24 @@ class LeaveApplicationController extends Controller
             return $this->sendResponse(null, 500, [$e->getMessage()], false);
         }
     }
+
+    /**
+     * change status the specified resource from storage.
+     */
+    public function status(Request $request)
+    {
+        try {
+            $id = $request->id;
+            $leave = LeaveApplication::find($id);
+            $leave->status = $request->status;
+            $leave->save();
+            return $this->sendResponse(null, 200, ['Status Changed successfully.'], true);
+        } catch (QueryException $e) {
+            Log::error('Database error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return $this->sendResponse(null, 500, [$e->getMessage()], false);
+        }
+    }
 }

@@ -50,6 +50,7 @@ Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('forgotPassword', [ForgotPasswordController::class, 'create']);
 Route::post('resetPassword', [ForgotPasswordController::class, 'update'])->name('password.reset');
 
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
@@ -123,6 +124,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::resource('leave-management', LeaveManagementController::class);
     Route::resource('leave-application', LeaveApplicationController::class);
+    Route::get('leave-application/status', [LeaveApplicationController::class,'status']);
 
 
 });
+
